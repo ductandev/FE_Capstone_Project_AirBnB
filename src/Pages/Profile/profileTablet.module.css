@@ -1,0 +1,106 @@
+.container {
+  max-width: 1320px;
+  margin: auto;
+  margin-top: 75px;
+}
+
+.logo {
+  width: 150px;
+  padding: 5px;
+  margin-bottom: 20px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.inputProfile,
+.buttonProfile {
+  border-radius: 3px;
+  font-size: 14px;
+  line-height: 28px;
+  letter-spacing: normal;
+  margin-top: 15px;
+  color: #3b3b3b;
+  width: 100%;
+}
+
+.buttonProfile {
+  border-radius: 3px;
+  background-color: #000000;
+  border: none;
+  color: white;
+  padding: 5px 32px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 28px;
+  width: 100%;
+  text-transform: uppercase;
+}
+
+.radioKeepSignIn {
+  color: #8d8d8d;
+  font-size: 12px;
+}
+
+.textForgotPass {
+  color: #acacac;
+  font-size: 12px;
+  text-align: end;
+  line-height: 23px;
+}
+
+.textByProfile {
+  color: #8d8d8d;
+  font-size: 12px;
+  text-align: center;
+  line-height: 14px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+.textByProfile p {
+  margin: 0px;
+}
+
+.textProfileFacebook,
+.textJoinUs {
+  color: #acacac;
+  font-size: 12px;
+  line-height: 23px;
+}
+
+.textProfileFacebook {
+  text-align: start;
+}
+.textJoinUs {
+  text-align: end;
+}
+
+.displayBlockInline {
+  display: inline-block;
+}
+
+.textPrivacy {
+  display: inline-block;
+  text-decoration: underline;
+  margin: 0px 3px !important;
+  color: #6d6d6d;
+}
+
+.textNotAMenber {
+  font-size: 12px;
+  display: inline-block;
+  color: #acacac;
+  margin: 0px;
+  text-align: end;
+}
+
+.textJoinUs {
+  display: inline-block;
+  text-decoration: underline;
+  margin: 0px 3px !important;
+  color: #6d6d6d;
+  text-align: end;
+}

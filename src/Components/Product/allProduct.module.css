@@ -1,0 +1,29 @@
+.headline, .headlinePrice, .desc{
+    font-family: NHaasGroteskTXW02-75Bd,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.imgSlider{
+    background-color: #F5F5F5;
+}
+.dFlex{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.headline{
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+.headlinePrice{
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    margin-right: 20px;
+    margin-bottom: 5px;
+}
+.category{
+    margin: 0;
+    color: #757575;
+    font-size: 16px;
+}

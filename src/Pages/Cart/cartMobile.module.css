@@ -1,0 +1,22 @@
+.container {
+    max-width: 1320px;
+    margin: auto;
+    margin-top: 75px;
+}
+.img{
+    padding: 0;
+}
+.me{
+    margin-top: 3px;
+    margin-right: 6px;
+}
+.totalBill{
+    font-weight: bold;
+}
+.price{
+    font-weight: normal;
+}
+.width{
+    width: 20px;
+    text-align: center;
+}

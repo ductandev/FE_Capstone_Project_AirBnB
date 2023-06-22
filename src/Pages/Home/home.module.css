@@ -1,0 +1,19 @@
+.container{
+    margin: 20px 40px;
+}
+.marginTop{
+    margin-top: 20px;
+}
+.ms{
+    margin-left: 40px;
+}
+.headline{
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    text-transform: uppercase;
+    margin: 20px 40px;
+}
+.mx{
+    margin: 0 40px;
+}
