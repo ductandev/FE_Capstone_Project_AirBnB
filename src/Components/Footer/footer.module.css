@@ -1,0 +1,27 @@
+.footer{
+    z-index: 1;
+    --footer-background: #ed5565;
+    display: grid;
+    position: relative;
+    grid-area: footer;
+    min-height: 12rem;
+}
+.bubbles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1rem;
+    background: var(--footer-background);
+    filter: url("#blob");
+}
+.bubble {
+    position: absolute;
+    left: var(--position, 50%);
+    background: var(--footer-background);
+    border-radius: 100%;
+    animation: bubble-size
+        var(--time, 4s) ease-in infinite
+        var(--delay, 0s);
+        
+}

@@ -15,7 +15,6 @@ type Props = {};
       <div className="content-layout" style={{ minHeight: "80vh" }}>
         <Outlet></Outlet>
       </div>
-      
       <Footer/>
     </>
   );

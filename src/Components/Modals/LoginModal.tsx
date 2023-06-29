@@ -14,12 +14,13 @@ import Heading from "../Header/Navbar/Heading";
 import Input from "../Input/Input";
 import { toast } from 'react-hot-toast'
 import Button from "../Header/Navbar/Button";
+import { NavLink } from "react-router-dom";
 
 
 
-const RegisterModal= () => {
+const LoginModal= () => {
   const registerModal = useRegisterModal();
-  const loginModal = useLoginModal();
+  const loginModal = useLoginModal()
   const [isLoading, setIsLoading] = useState(false);
 
   const { 
@@ -30,7 +31,6 @@ const RegisterModal= () => {
     },
   } = useForm<FieldValues>({
     defaultValues: {
-      name: '',
       email: '',
       password: ''
     },
@@ -58,20 +58,12 @@ const RegisterModal= () => {
   const bodyContent = (
     <div className="flex flex-col gap-3">
       <Heading
-        title="Welcome to Airbnb"
-        subtitle="Create an account!"
+        title="Welcome back"
+        subtitle="Login to your account!"
       />
       <Input
         id="email"
         label="Email"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <Input
-        id="name"
-        label="Name"
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -112,7 +104,7 @@ const RegisterModal= () => {
           font-light
         "
       >
-        <p>Already have an account?
+        <p>New to Airbnb?
           <span 
             // onClick={onToggle} 
             className="
@@ -121,10 +113,10 @@ const RegisterModal= () => {
               hover:underline
             "
             onClick={()=>{
-              loginModal.onOpen();
-              registerModal.onClose();
+              loginModal.onClose();
+              registerModal.onOpen();
             }}
-            > Log in</span>
+            > Create an account.</span>
         </p>
       </div>
     </div>
@@ -136,10 +128,10 @@ const RegisterModal= () => {
   return (
     <Modals
       disabled={isLoading}
-      isOpen={registerModal.isOpen}
-      title="Register"
+      isOpen={loginModal.isOpen}
+      title="Login"
       actionLabel="Continue"
-      onClose={registerModal.onClose}
+      onClose={loginModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
@@ -147,4 +139,4 @@ const RegisterModal= () => {
   );
 }
 
-export default RegisterModal;
+export default LoginModal;

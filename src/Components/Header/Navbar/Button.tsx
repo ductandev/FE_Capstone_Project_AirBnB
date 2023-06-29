@@ -11,7 +11,6 @@ interface ButtonProps {
     icon?: IconType;
 }
 
-
 type Props = {}
 
 const Button: React.FC<ButtonProps> = ({

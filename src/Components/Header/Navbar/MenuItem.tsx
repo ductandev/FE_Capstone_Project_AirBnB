@@ -6,8 +6,6 @@ interface MenuItemProps {
     label: string;
 }
 
-type Props = {}
-
 const MenuItem:React.FC<MenuItemProps> = ({onClick, label}):JSX.Element => {
   return (
     <div className='px-4 py-3 hover:bg-neutral-100 transition font-semobold' onClick={onClick}>
