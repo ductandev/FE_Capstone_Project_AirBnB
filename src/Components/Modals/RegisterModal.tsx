@@ -13,7 +13,7 @@ import Modals from "./Modals";
 import Heading from "../Header/Navbar/Heading";
 import Input from "../Input/Input";
 import { toast } from 'react-hot-toast'
-import Button from "../Header/Navbar/Button";
+import Button from "../Button/Button";
 
 
 

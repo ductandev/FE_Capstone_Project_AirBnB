@@ -4,69 +4,8 @@ type Props = {}
 
 export default function Footer({ }: Props) {
     return (
-        <div className='mt-3 bg-gray-100'>
-            {/* <div className='
-            container
-            mx-auto
-            pt-10
-            grid 
-            grid-cols-2 
-            md:grid-cols-2
-            lg:grid-cols-4 
-            gap-3'>
-                <div className='pb-4 pl-3 sm:pl-2 md:pl-0'>
-                    <h3 className='font-extrabold text-lg pb-1'>Help</h3>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Help Center</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Safe imformation</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Support people disabilities</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Cancel option</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Measures to deal with covid-19</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Neighbor's fear report</p>
-                </div>
-                <div className='pb-4 pl-3 md:pl-14 lg:pl-2'>
-                    <h3 className='font-extrabold text-lg pb-1'>Community</h3>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Airbnb.org: housing relief</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Supporting Afghan Refugees</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Anti-discrimination</p>
-                </div>
-                <div className='pb-4 pl-3 sm:pl-2 md:pl-0 lg:pl-2'>
-                    <h3 className='font-extrabold text-lg pb-1'>Welcome guests</h3>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Try to receive guests</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>AirCover for Hosts</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>See resources for welcoming guests</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Visit the community forum</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Welcoming guests responsibly</p>
-                </div>
-                <div className='pb-4 pl-3 md:pl-14 lg:pl-16'>
-                    <h3 className='font-extrabold text-lg pb-1'>Airbnb</h3>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>News sites</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Learn new features</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Open letter from founders</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Career opportunities</p>
-                    <p className='pb-1 xl:pb-2 hover:text-black'>Investors</p>
-                </div>
-            </div>
-
-            <div className="flex flex-wrap justify-center mt-4">
-                <p>© 2023 Airbnb, Inc.</p>
-                <ul className="flex flex-nowrap mb-4">
-                    <li className="ml-6 !list-disc">Privacy</li>
-                    <li className="ml-6 !list-disc">Rules</li>
-                    <li className="ml-6 !list-disc">Sitemap</li>
-                </ul>
-            </div> */}
-
-
-
-
-
-
-
-
-
-
-
-            <div className="main"></div>
+        <div className='pt-32 bg-white'>
+            {/* <div className="main"></div> */}
             <div className="footer">
                 <div className="bubbles">
                     <div className="bubble" style={{ width: '4.7635134475943035rem', height: '6.227136981196778rem', left: '101.97060708513264%', animationDuration: '3.1761511275186756s', animationDelay: '-2.598114761465852s' }}>
@@ -328,10 +267,6 @@ export default function Footer({ }: Props) {
                 </div>
 
 
-
-
-
-
                 <div className="z-50 text-white" style={{backgroundColor: '#ED5565'}}>
                     <div className='
                     container
@@ -394,23 +329,6 @@ export default function Footer({ }: Props) {
                     </filter>
                 </defs>
             </svg>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         </div >
     )
 }

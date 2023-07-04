@@ -7,23 +7,23 @@ type Props = {};
 
 // eslint-disable-next-line no-empty-pattern
 export default function LoadingCustom({ }: Props) {
-  const { idLoading } = useSelector((state: RootState) => state.productReducer);
+  // const { idLoading } = useSelector((state: RootState) => state.productReducer);
 
   return (
     <div
-      style={{
-        position: "fixed",
-        width: "100%",
-        height: "100%",
-        zIndex: 10,
-        background: "#e8e8e8",
-        display: idLoading ? "flex" : "none",
-        justifyContent: "center",
-        alignItems: "center",
-        left: 0,
-        top: 0,
-        color: "#fff",
-      }}
+      // style={{
+      //   position: "fixed",
+      //   width: "100%",
+      //   height: "100%",
+      //   zIndex: 10,
+      //   background: "#e8e8e8",
+      //   display: idLoading ? "flex" : "none",
+      //   justifyContent: "center",
+      //   alignItems: "center",
+      //   left: 0,
+      //   top: 0,
+      //   color: "#fff",
+      // }}
     >
 
 {/* 

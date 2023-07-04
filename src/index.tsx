@@ -28,7 +28,7 @@ export const history: any = createBrowserHistory();
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <Provider store={store}>
-    <Loading></Loading>
+    {/* <Loading></Loading> */}
     {/* <LoadingCustom></LoadingCustom> */}
     <HistoryRouter history={history}>
       <Routes>

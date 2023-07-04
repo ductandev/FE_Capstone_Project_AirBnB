@@ -22,11 +22,29 @@ body {
   overflow-x: hidden;
   background: #F5F7FA;
   min-height: 100vh;
-  font-family: "Open Sans", sans-serif;
+  font-family: "nunito", sans-serif;
+  scroll-behavior: smooth;
 }
 
 
-/* FOOTER */
+/* ================================= */
+/* -------------Owlcarousel-------------- */
+.owl-nav{
+  display: none;
+}
+.owl-prev,.owl-next{
+  display: none;
+}
+.owl-prev span,.owl-next span{
+  display: none;
+}
+.owl-dots{
+  display: none;
+}
+
+
+/* ================================= */
+/* -------------FOOTER-------------- */
 body .footer {
   z-index: 1;
   --footer-background: #ED5565;
@@ -98,3 +116,34 @@ body .footer .bubbles .bubble {
       bottom: var(--distance, 10rem);
   }
 }
+
+/* ===================================== */
+/* -------------RESPONSIVE-------------- */
+@media only screen and (max-width: 767px) {
+  .container {
+      padding-right: 1rem;
+      padding-left: 1rem;
+      max-width: 490px;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .container {
+      padding-right: 1rem;
+      padding-left: 1rem;
+      max-width: 400px;
+  }
+}
+@media only screen and (max-width: 414px) {
+  .container {
+      max-width: 360px !important;
+      padding-right: 1rem;
+      padding-left: 1rem;
+  }
+}
+
+
+
+
+
+
+

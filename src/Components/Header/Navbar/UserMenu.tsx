@@ -23,7 +23,7 @@ export default function UserMenu({ }: Props) {
     return (
         <div className='relative'>
             <div className="flex flex-row items-center gap-2">
-                <div className={"hidden lg:block text-sm font-semiblod py-3 px-1 rounded-full hover:bg-neutral-100 transition cursor-pointer"} onClick={() => { }}>
+                <div className={"hidden lg:block text-sm font-semiblod p-3 rounded-full hover:bg-neutral-100 transition cursor-pointer"} onClick={() => { }}>
                     Airbnb your home
                 </div>
                 <div className={"hidden lg:block text-xl font-semiblod py-2 px-2 rounded-full hover:bg-neutral-100 transition cursor-pointer"} onClick={() => { }}>
@@ -45,7 +45,7 @@ export default function UserMenu({ }: Props) {
                         <MenuItem onClick={registerModal.onOpen} label='Sign up'/>
                         <hr />
                         <MenuItem onClick={() => {}} label='House for rent'/>
-                        <MenuItem onClick={() => {}} label='Experience organization'/>
+                        <MenuItem onClick={() => {}} label='Organization'/>
                         <MenuItem onClick={() => {}} label='Help'/>
                         <hr />
                         <MenuItem onClick={() => {}} label='Logout'/>
