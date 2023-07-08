@@ -1,10 +1,6 @@
-'use client';
+"use client";
 
-import axios from "axios";
-import { AiFillGithub } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
 import { useCallback, useState } from "react";
-import { FieldValues, SubmitHandler,useForm} from "react-hook-form";
 
 import useRegisterModal from "../../Hooks/useRegisterModal";
 import useLoginModal from "../../Hooks/useLoginModal";
@@ -12,139 +8,205 @@ import useLoginModal from "../../Hooks/useLoginModal";
 import Modals from "./Modals";
 import Heading from "../Header/Navbar/Heading";
 import Input from "../Input/Input";
-import { toast } from 'react-hot-toast'
+import { toast } from "react-hot-toast";
 import Button from "../Button/Button";
 
+import { useFormik } from "formik";
+import * as yup from "yup";
 
+import { DispatchType } from "../../Redux/configStore";
+import { useDispatch } from "react-redux";
 
-const RegisterModal= () => {
+export interface UserregisterFrm {
+  email: string;
+  name: string;
+  password: string;
+  phone: string;
+  birthday: string;
+  gender: boolean;
+}
+
+const RegisterModal = () => {
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { 
-    register, 
-    handleSubmit,
-    formState: {
-      errors,
+  const registerFrm = useFormik<UserregisterFrm>({
+    initialValues: {
+      email: "",
+      name: "",
+      password: "",
+      phone: "",
+      birthday: "",
+      gender:  true,
     },
-  } = useForm<FieldValues>({
-    defaultValues: {
-      name: '',
-      email: '',
-      password: ''
+    validationSchema: yup.object().shape({
+      name: yup
+        .string()
+        .required("Họ và tên không được bỏ trống!")
+        .matches(/^[a-zA-Z\s]+$/, "Tên chỉ được chứa chữ cái."),
+      email: yup
+        .string()
+        .required("Email không được bỏ trống!")
+        .email("Email không hợp lệ!"),
+      password: yup
+        .string()
+        .required("Mật khẩu không được bỏ trống!")
+        .min(6, "Mật khẩu phải từ 6 đến 32 ký tự.")
+        .max(32, "Mật khẩu phải từ 6 đến 32 ký tự."),
+      phone: yup
+        .string()
+        .required("Số điện thoại không được bỏ trống!")
+        .min(10, "Số điện tối thiểu là 10 số!")
+        .max(10, "Số điện tối đa là 10 số!")
+        .matches(/\d$/, 'Vui lòng chỉ điền số!'),
+      birthday: yup
+        .string()
+        .required("Ngày sinh không được bỏ trống!"),
+      gender: yup
+        .string()
+        .required("Giới tính không được bỏ trống!"),
+    }),
+    onSubmit: (values: UserregisterFrm) => {
+      console.log(values);
+      // const actionApi = loginAsyncAction(values);
+      // dispatch(actionApi);
+      // navigate("/");
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    setIsLoading(true);
-
-    axios.post('/api/register', data)
-    .then(() => {
-      registerModal.onClose();
-    })
-    .catch((error) => {
-        toast.error("Register Fail")
-    })
-    .finally(() => {
-      setIsLoading(false);
-    })
-  }
-
-//   const onToggle = useCallback(() => {
-//     registerModal.onClose();
-//   }, [registerModal, loginModal])
-
   const bodyContent = (
-    <div className="flex flex-col gap-3">
-      <Heading
-        title="Welcome to Airbnb"
-        subtitle="Create an account!"
-      />
-      <Input
-        id="email"
-        label="Email"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <Input
-        id="name"
-        label="Name"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <Input
-        id="password"
-        label="Password"
-        type="password"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
+    <div>
+      <Heading title="Chào mừng đến với" subtitle="Tạo tài khoản!" />
+
+      <div className="rounded-t-xl overflow-hidden border border-gray-400">
+        <Input
+          id="name"
+          name="name"
+          label="Họ và tên"
+          disabled={isLoading}
+          onInput={registerFrm.handleChange}
+        />
+        {registerFrm.errors.name && (
+          <p className="text-rose-500 text-sm ms-4">{registerFrm.errors.name}</p>
+        )}
+      </div>
+
+      <div className="overflow-hidden border border-gray-400 border-t-0">
+        <Input
+          id="email"
+          name="email"
+          label="Email"
+          disabled={isLoading}
+          onInput={registerFrm.handleChange}
+        />
+        {registerFrm.errors.email && (
+          <p className="text-rose-500 text-sm ms-4">{registerFrm.errors.email}</p>
+        )}
+      </div>
+
+      <div className="overflow-hidden border border-gray-400 border-t-0">
+        <Input
+          id="password"
+          name="password"
+          label="Mật khẩu"
+          type="password"
+          disabled={isLoading}
+          onInput={registerFrm.handleChange}
+        />
+        {registerFrm.errors.password && (
+          <p className="text-rose-500 text-sm ms-4">{registerFrm.errors.password}</p>
+        )}
+      </div>
+
+      <div className="overflow-hidden border border-gray-400 border-t-0">
+        <Input
+          id="phone"
+          name="phone"
+          label="Điện thoại"
+          disabled={isLoading}
+          onInput={registerFrm.handleChange}
+        />
+        {registerFrm.errors.phone && (
+          <p className="text-rose-500 text-sm ms-4">{registerFrm.errors.phone}</p>
+        )}
+      </div>
+
+      <div className="overflow-hidden border border-gray-400 border-t-0">
+        <Input
+          id="birthday"
+          name="birthday"
+          label="Ngày tháng năm sinh"
+          disabled={isLoading}
+          onInput={registerFrm.handleChange}
+        />
+        {registerFrm.errors.birthday && (
+          <p className="text-rose-500 text-sm ms-4">{registerFrm.errors.password}</p>
+        )}
+      </div>
+
+      <div className="rounded-b-xl overflow-hidden border border-gray-400 border-t-0">
+        <Input
+          id="password"
+          name="password"
+          label="Giới tính"
+          disabled={isLoading}
+          onInput={registerFrm.handleChange}
+          type="date"
+        />
+        {registerFrm.errors.password && (
+          <p className="text-rose-500 text-sm ms-4">{registerFrm.errors.password}</p>
+        )}
+      </div>
     </div>
-  )
+  );
 
   const footerContent = (
-    <div className="flex flex-col gap-4 mt-3">
+    <div className="">
       <hr />
-      <Button 
-        outline 
-        label="Continue with Google"
-        icon={FcGoogle}
-        onClick={() => {}} 
-      />
-      <Button 
-        outline 
-        label="Continue with Github"
-        icon={AiFillGithub}
-        onClick={() => {}}
-      />
-      <div 
+      <div
         className="
           text-neutral-500 
-          text-center 
-          mt-4 
+          text-center  
           font-light
+          p-3
         "
       >
-        <p>Already have an account?
-          <span 
-            // onClick={onToggle} 
+        <p>
+          Bạn đã có tài khoản?
+          <span
+            // onClick={onToggle}
             className="
               text-neutral-800
               cursor-pointer 
               hover:underline
             "
-            onClick={()=>{
+            onClick={() => {
               loginModal.onOpen();
               registerModal.onClose();
             }}
-            > Log in</span>
+          >
+            {" "}
+            Đăng nhập
+          </span>
         </p>
       </div>
     </div>
-  )
-
-
-
+  );
 
   return (
-    <Modals
-      disabled={isLoading}
-      isOpen={registerModal.isOpen}
-      title="Register"
-      actionLabel="Continue"
-      onClose={registerModal.onClose}
-      onSubmit={handleSubmit(onSubmit)}
-      body={bodyContent}
-      footer={footerContent}
-    />
+    <form onSubmit={registerFrm.handleSubmit}>
+      <Modals
+        disabled={isLoading}
+        isOpen={registerModal.isOpen}
+        title="Đăng ký"
+        actionLabel="Đăng ký"
+        onClose={registerModal.onClose}
+        body={bodyContent}
+        footer={footerContent}
+      />
+    </form>
   );
-}
+};
 
 export default RegisterModal;

@@ -13,7 +13,8 @@ interface RegisterModalStore {
 
 const useRegisterModal = create<RegisterModalStore>((set) => ({
     isOpen: false,
-    onOpen: () => set({isOpen: true}), // Khi gọi onOpen, ta sử dụng hàm set để cập nhật giá trị của thuộc tính isOpen thành true.
+    // Khi gọi onOpen, ta sử dụng hàm set để cập nhật giá trị của thuộc tính isOpen thành true.
+    onOpen: () => set({isOpen: true}), 
     onClose: () => set({isOpen: false}),
 }))
 

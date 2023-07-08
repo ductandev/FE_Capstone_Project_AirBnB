@@ -85,12 +85,12 @@ export default function Home({}: Props) {
   };
 
   return (
-    <div className=" pt-20 bg-white">
+    <div className="bg-white">
       <div className="container mx-auto">
         <Categories />
 
         <h1 className="font-bold text-lg xl:text-xl mt-4">
-          Explore nearby places
+          Khám phá những điểm đến gần đây
         </h1>
 
         {arrLocation?.length > 0 && (
@@ -119,7 +119,7 @@ export default function Home({}: Props) {
           </>
         )}
 
-        <h1 className="font-bold text-lg xl:text-xl mt-4">Stay anywhere</h1>
+        <h1 className="font-bold text-lg xl:text-xl mt-4">Ở bất cứ đâu</h1>
         <div className="pt-4 grid sm:grid-col-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {renderAllRoom()}
         </div>

@@ -278,44 +278,44 @@ export default function Footer({ }: Props) {
                     lg:grid-cols-4 
                     gap-3'>
                         <div className='pb-4 pl-3 sm:pl-2 md:pl-0'>
-                            <h3 className='font-extrabold text-lg pb-1'>Help</h3>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Help Center</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Safe imformation</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Support people disabilities</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Cancel option</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Measures to deal with covid-19</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Neighbor's fear report</p>
+                            <h3 className='font-extrabold text-lg pb-1'>Hỗ trợ</h3>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Trung tâm trợ giúp</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Thông tin an toàn</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Hỗ trợ người khuyết tật</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Các tùy chọn hủy</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Biện pháp đối phó covid-19</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Báo cáo lo ngại hàng xóm</p>
                         </div>
                         <div className='pb-4 pl-3 md:pl-14 lg:pl-2'>
-                            <h3 className='font-extrabold text-lg pb-1'>Community</h3>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Airbnb.org: housing relief</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Supporting Afghan Refugees</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Anti-discrimination</p>
+                            <h3 className='font-extrabold text-lg pb-1'>Cộng đồng</h3>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Airbnb.org: nhà cứu trợ</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Hỗ trợ dân tị nạn Afghan</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Chống phân biệt</p>
                         </div>
                         <div className='pb-4 pl-3 sm:pl-2 md:pl-0 lg:pl-2'>
-                            <h3 className='font-extrabold text-lg pb-1'>Welcome guests</h3>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Try to receive guests</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>AirCover for Hosts</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>See resources for welcoming guests</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Visit the community forum</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Welcoming guests responsibly</p>
+                            <h3 className='font-extrabold text-lg pb-1'>Đón tiếp khách</h3>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Thử đón nhận khách</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>AirCover cho chủ nhà</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Xem tài nguyên đón tiếp khách</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Truy cập diễn đàn cộng đồng</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Đón tiếp khách có trách nhiệm</p>
                         </div>
                         <div className='pb-4 pl-3 md:pl-14 lg:pl-16'>
                             <h3 className='font-extrabold text-lg pb-1'>Airbnb</h3>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>News sites</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Learn new features</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Open letter from founders</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Career opportunities</p>
-                            <p className='pb-1 xl:pb-2 hover:text-black'>Investors</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Trang tin tức</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Học các tính năng mới</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Thư ngỏ từ các nhà sáng lập</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Cơ hội nghề nghiệp</p>
+                            <p className='pb-1 xl:pb-2 hover:text-black text-sm sm:text-base'>Nhà đầu tư</p>
                         </div>
                     </div>
 
-                    <div className="flex flex-wrap justify-center mt-4">
+                    <div className="flex flex-wrap justify-center mt-4 text-sm sm:text-base">
                         <p>© 2023 Airbnb, Inc.</p>
                         <ul className="flex flex-nowrap mb-4">
-                            <li className="ml-6 !list-disc">Privacy</li>
-                            <li className="ml-6 !list-disc">Rules</li>
-                            <li className="ml-6 !list-disc">Sitemap</li>
+                            <li className="ml-6 !list-disc">Quyền riêng tư</li>
+                            <li className="ml-6 !list-disc">Điều khoản</li>
+                            <li className="ml-6 !list-disc">Sơ đồ web</li>
                         </ul>
                     </div>
                 </div>

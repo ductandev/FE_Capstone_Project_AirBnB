@@ -18,10 +18,10 @@ import { Provider } from "react-redux";
 import Loading from "./Components/Loading/Loading";
 import ResponsiveItem from "./Templates/ResponsiveItem";
 import Home from "./Pages/Home/Home";
-import HomeMobile from "./Pages/Home/HomeMobile";
 import Detail from "./Pages/Detail/Detail";
 import DetailMobile from "./Pages/Detail/DetailMobile";
 import Search from "./Pages/Search/Search";
+import LoadingCustom from "./Components/Loading/LoadingCustom";
 
 export const history: any = createBrowserHistory();
 
@@ -29,11 +29,11 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
   <Provider store={store}>
     {/* <Loading></Loading> */}
-    {/* <LoadingCustom></LoadingCustom> */}
+    <LoadingCustom></LoadingCustom>
     <HistoryRouter history={history}>
       <Routes>
         <Route path="" element={<HomeTemplate />}>
-          <Route index element={<ResponsiveItem component={Home} tabletComponent={HomeMobile} />}></Route>
+          <Route index element={<Home/>}></Route>
           <Route path="detail">
             <Route path=':id' element={<ResponsiveItem component={Detail} largeTableComponent={DetailMobile} />}></Route>
           </Route>

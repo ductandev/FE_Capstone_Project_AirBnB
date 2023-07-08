@@ -48,10 +48,10 @@ export default function ListingCard({ room }: Props) {
                         {room.tenPhong}
                     </h2>
                     <p className="text-grey-500">
-                        Bedroom: {room.phongNgu} - Bathroom: {room.phongTam}
+                        Phòng ngủ: {room.phongNgu} - Phòng tắm: {room.phongTam}
                     </p>
-                    <p className="text-grey-500">Welcome up to {room.khach} guests</p>
-                    <p className="font-semibold">${room.giaTien} night</p>
+                    <p className="text-grey-500">Đón tối đa {room.khach} khách</p>
+                    <p className="font-semibold">${room.giaTien} đêm</p>
                     <div className="flex flex-row text-rose-500 pt-1">
                         <span className="pe-1"><BsFillStarFill /></span>
                         <span className="pe-1"><BsFillStarFill /></span>

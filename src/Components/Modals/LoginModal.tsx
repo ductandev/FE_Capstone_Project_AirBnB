@@ -1,10 +1,4 @@
-'use client';
-
-import axios from "axios";
-import { AiFillGithub } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
-import { useCallback, useState } from "react";
-import { FieldValues, SubmitHandler,useForm} from "react-hook-form";
+"use client";
 
 import useRegisterModal from "../../Hooks/useRegisterModal";
 import useLoginModal from "../../Hooks/useLoginModal";
@@ -12,131 +6,132 @@ import useLoginModal from "../../Hooks/useLoginModal";
 import Modals from "./Modals";
 import Heading from "../Header/Navbar/Heading";
 import Input from "../Input/Input";
-import { toast } from 'react-hot-toast'
-import Button from "../Button/Button";
-import { NavLink } from "react-router-dom";
 
+import { useFormik } from "formik";
+import * as yup from "yup";
 
+import { DispatchType, RootState } from "../../Redux/configStore";
+import { useDispatch, useSelector } from "react-redux";
+import { loginAsyncAction } from "../../Redux/reducers/authReducer";
 
-const LoginModal= () => {
+export interface UserLoginFrm {
+  email: string;
+  password: string;
+}
+
+const LoginModal = () => {
   const registerModal = useRegisterModal();
-  const loginModal = useLoginModal()
-  const [isLoading, setIsLoading] = useState(false);
+  const loginModal = useLoginModal();
 
-  const { 
-    register, 
-    handleSubmit,
-    formState: {
-      errors,
+  const { hideInputBtn } = useSelector((state: RootState) => state.authReducer);
+  const dispatch: DispatchType = useDispatch();
+
+  const loginFrm = useFormik<UserLoginFrm>({
+    initialValues: {
+      email: "",
+      password: "",
     },
-  } = useForm<FieldValues>({
-    defaultValues: {
-      email: '',
-      password: ''
+    validationSchema: yup.object().shape({
+      email: yup
+        .string()
+        .required("Email không được bỏ trống!")
+        .email("Email không hợp lệ!"),
+      password: yup
+        .string()
+        .required("Password không được bỏ trống!")
+        .min(6, "Password phải từ 6 đến 32 ký tự.")
+        .max(32, "Password phải từ 6 đến 32 ký tự."),
+    }),
+    onSubmit: (values: UserLoginFrm) => {
+      const actionApi = loginAsyncAction(values);
+      dispatch(actionApi);
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    setIsLoading(true);
-
-    axios.post('/api/register', data)
-    .then(() => {
-      registerModal.onClose();
-    })
-    .catch((error) => {
-        toast.error("Register Fail")
-    })
-    .finally(() => {
-      setIsLoading(false);
-    })
-  }
-
-//   const onToggle = useCallback(() => {
-//     registerModal.onClose();
-//   }, [registerModal, loginModal])
-
   const bodyContent = (
-    <div className="flex flex-col gap-3">
+    <div>
       <Heading
-        title="Welcome back"
-        subtitle="Login to your account!"
+        title="Chào mừng trở lại"
+        subtitle="Đăng nhập ngay tài khoản của bạn!"
       />
-      <Input
-        id="email"
-        label="Email"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <Input
-        id="password"
-        label="Password"
-        type="password"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
+      <div className="rounded-t-xl overflow-hidden border border-gray-400 mt-4">
+        <Input
+          id="email"
+          name="email"
+          label="Email"
+          disabled={hideInputBtn}
+          required
+          onInput={loginFrm.handleChange}
+        />
+        {loginFrm.errors.email && (
+          <p className="text-rose-500 text-sm ms-4">{loginFrm.errors.email}</p>
+        )}
+      </div>
+
+      <div className="rounded-b-xl overflow-hidden border border-gray-400 border-t-0">
+        <Input
+          id="password"
+          name="password"
+          label="Mật khẩu"
+          type="password"
+          disabled={hideInputBtn}
+          required
+          onInput={loginFrm.handleChange}
+        />
+        {loginFrm.errors.password && (
+          <p className="text-rose-500 text-sm ms-4">
+            {loginFrm.errors.password}
+          </p>
+        )}
+      </div>
     </div>
-  )
+  );
 
   const footerContent = (
-    <div className="flex flex-col gap-4 mt-3">
+    <div className="">
       <hr />
-      <Button 
-        outline 
-        label="Continue with Google"
-        icon={FcGoogle}
-        onClick={() => {}} 
-      />
-      <Button 
-        outline 
-        label="Continue with Github"
-        icon={AiFillGithub}
-        onClick={() => {}}
-      />
-      <div 
+      <div
         className="
           text-neutral-500 
           text-center 
-          mt-4 
+          p-4 
           font-light
         "
       >
-        <p>New to Airbnb?
-          <span 
-            // onClick={onToggle} 
+        <p>
+          Người mới tới Airbnb?
+          <span
             className="
               text-neutral-800
               cursor-pointer 
               hover:underline
             "
-            onClick={()=>{
+            onClick={() => {
               loginModal.onClose();
               registerModal.onOpen();
             }}
-            > Create an account.</span>
+          >
+            {" "}
+            Tạo tài khoản.
+          </span>
         </p>
       </div>
     </div>
-  )
-
-
-
+  );
 
   return (
-    <Modals
-      disabled={isLoading}
-      isOpen={loginModal.isOpen}
-      title="Login"
-      actionLabel="Continue"
-      onClose={loginModal.onClose}
-      onSubmit={handleSubmit(onSubmit)}
-      body={bodyContent}
-      footer={footerContent}
-    />
+    <form onSubmit={loginFrm.handleSubmit}>
+      <Modals
+        isOpen={loginModal.isOpen}
+        onClose={loginModal.onClose}
+        title="Đăng nhập"
+        body={bodyContent}
+        footer={footerContent}
+        actionLabel="Đăng nhập"
+        disabled={hideInputBtn}
+      />
+    </form>
   );
-}
+};
 
 export default LoginModal;

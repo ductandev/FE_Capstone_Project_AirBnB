@@ -12,7 +12,7 @@ type Props = {};
     <>
       {/* <ResponsiveItem component={Header} largeTableComponent={HeaderMobile} /> */}
       <Header />
-      <div className="content-layout" style={{ minHeight: "80vh" }}>
+      <div className="content-layout pt-20" style={{ minHeight: "80vh" }}>
         <Outlet></Outlet>
       </div>
       <Footer/>

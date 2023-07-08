@@ -7,6 +7,7 @@ import Avartar from '../../Avartar/Avartar'
 import MenuItem from './MenuItem'
 import useRegisterModal from '../../../Hooks/useRegisterModal'
 import useLoginModal from '../../../Hooks/useLoginModal'
+import { USER_LOGIN, clearStorage } from '../../../Util/config'
 
 
 type Props = {}
@@ -24,7 +25,7 @@ export default function UserMenu({ }: Props) {
         <div className='relative'>
             <div className="flex flex-row items-center gap-2">
                 <div className={"hidden lg:block text-sm font-semiblod p-3 rounded-full hover:bg-neutral-100 transition cursor-pointer"} onClick={() => { }}>
-                    Airbnb your home
+                    Trở thành chủ nhà
                 </div>
                 <div className={"hidden lg:block text-xl font-semiblod py-2 px-2 rounded-full hover:bg-neutral-100 transition cursor-pointer"} onClick={() => { }}>
                     <TbWorld/>
@@ -41,14 +42,17 @@ export default function UserMenu({ }: Props) {
                 <div className='absolute rounded-xl shadow-md w-[40vw] md:w-52 lg:w-3/4 bg-white overflow-hidden right-0 top-12 text-sm mt-2 border-[1px] border-solid border-light-gray'>
                     <div className='flex flex-col cursor-pointer'>
                         <>
-                        <MenuItem onClick={loginModal.onOpen} label='Login'/>
-                        <MenuItem onClick={registerModal.onOpen} label='Sign up'/>
+                        <MenuItem onClick={loginModal.onOpen} label='Đăng nhập'/>
+                        <MenuItem onClick={registerModal.onOpen} label='Đăng ký'/>
                         <hr />
-                        <MenuItem onClick={() => {}} label='House for rent'/>
-                        <MenuItem onClick={() => {}} label='Organization'/>
-                        <MenuItem onClick={() => {}} label='Help'/>
+                        <MenuItem onClick={() => {}} label='Cho thuê nhà'/>
+                        <MenuItem onClick={() => {}} label='Tổ chức'/>
+                        <MenuItem onClick={() => {}} label='Trợ giúp'/>
                         <hr />
-                        <MenuItem onClick={() => {}} label='Logout'/>
+                        <MenuItem onClick={() => {
+                            clearStorage(USER_LOGIN);
+                            window.location.reload(); //f5
+                        }} label='Đăng xuất'/>
                         </>
 
                     </div>

@@ -85,7 +85,7 @@ export default function HomeMobile({}: Props) {
   };
 
   return (
-    <div className=" pt-20 bg-white">
+    <div className="bg-white">
       <div className="container mx-auto">
         <Categories />
 
