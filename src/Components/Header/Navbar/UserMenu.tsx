@@ -84,6 +84,8 @@ export default function UserMenu({ }: Props) {
                     setTimeout(() => {
                         window.location.reload(); //f5
                     }, 700);
+                    navigate('/');
+                    setIsOpen(false);
                 }} label='Đăng xuất' />
             </>
             );

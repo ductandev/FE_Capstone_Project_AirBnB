@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import roomReducer from './reducers/roomReducer';
 import locationReducer from './reducers/locationReducer';
 import authReducer from './reducers/authReducer';
+import userReducer from './reducers/userReducer';
 
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     locationReducer: locationReducer,
     roomReducer: roomReducer,
     authReducer: authReducer,
+    userReducer: userReducer,
   }
 });
 

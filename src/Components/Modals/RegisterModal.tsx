@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 import useRegisterModal from "../../Hooks/useRegisterModal";
 import useLoginModal from "../../Hooks/useLoginModal";
@@ -8,8 +8,6 @@ import useLoginModal from "../../Hooks/useLoginModal";
 import Modals from "./Modals";
 import Heading from "../Header/Navbar/Heading";
 import Input from "../Input/Input";
-import { toast } from "react-hot-toast";
-import Button from "../Button/Button";
 
 import { useFormik } from "formik";
 import * as yup from "yup";
