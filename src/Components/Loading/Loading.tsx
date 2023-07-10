@@ -1,10 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/configStore";
+import { SyncLoader } from "react-spinners";
+
 
 type Props = {};
 
-export default function Loading({}: Props) {
+export default function Loading({ }: Props) {
   const { isLoading } = useSelector((state: RootState) => state.authReducer);
 
   return (
@@ -14,7 +16,7 @@ export default function Loading({}: Props) {
         width: "100%",
         height: "100%",
         zIndex: 10,
-        background: "rgba(0,0,0,.5)",
+        background: "#e8e8e8",
         display: isLoading ? "flex" : "none",
         justifyContent: "center",
         alignItems: "center",
@@ -23,8 +25,9 @@ export default function Loading({}: Props) {
         color: "#fff",
       }}
     >
-      <h1> Loading ... </h1>
+
+      <SyncLoader color="#36d7b7" />
+
     </div>
   );
 }
-

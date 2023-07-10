@@ -5,10 +5,7 @@ import { createBrowserHistory } from "history";
 import "./index.css";
 
 import HomeTemplate from "./Templates/HomeTemplate";
-import Login from "./Pages/Login/Login";
 import Profile from "./Pages/Profile/Profile";
-import ProfileTablet from "./Pages/Profile/ProfileTablet";
-import Register from "./Pages/Register/Register";
 import Favourite from "./Pages/Favourite/Favourite";
 
 // Setup redux
@@ -21,15 +18,14 @@ import Home from "./Pages/Home/Home";
 import Detail from "./Pages/Detail/Detail";
 import DetailMobile from "./Pages/Detail/DetailMobile";
 import Search from "./Pages/Search/Search";
-import LoadingCustom from "./Components/Loading/LoadingCustom";
+import TripHistory from "./Pages/TripHistory/TripHistory";
 
 export const history: any = createBrowserHistory();
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <Provider store={store}>
-    {/* <Loading></Loading> */}
-    <LoadingCustom></LoadingCustom>
+    <Loading></Loading>
     <HistoryRouter history={history}>
       <Routes>
         <Route path="" element={<HomeTemplate />}>
@@ -37,11 +33,10 @@ root.render(
           <Route path="detail">
             <Route path=':id' element={<ResponsiveItem component={Detail} largeTableComponent={DetailMobile} />}></Route>
           </Route>
-          <Route path="login" element={<Login />}></Route>
-          <Route path="profile" element={<ResponsiveItem component={Profile} largeTableComponent={ProfileTablet}/>}></Route>
-          <Route path="register" element={<Register />} />
-          <Route path="search" element={<Search />} />
+          <Route path="profile" element={<Profile/>}></Route>
+          <Route path="trips-history" element={<TripHistory/>}></Route>
           <Route path="favourite" element={<Favourite />} />
+          <Route path="search" element={<Search />} />
 
           <Route path="*" element={<Navigate to="/" />}></Route>
         </Route>

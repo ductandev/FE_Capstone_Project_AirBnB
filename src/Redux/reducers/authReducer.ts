@@ -5,6 +5,7 @@ import { UserLoginFrm } from '../../Components/Modals/LoginModal';
 // import { toast } from 'react-hot-toast';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { UserRegisterFrm } from '../../Components/Modals/RegisterModal';
 
 
 export interface UserLoginApi {
@@ -43,6 +44,7 @@ const authReducer = createSlice({
     builder
       .addCase(loginAsyncAction.pending, (state) => {
         state.isLoading = true;
+        state.closeModal = false;
       })
       .addCase(loginAsyncAction.fulfilled, (state, action) => {
         state.userLogin = action.payload;
@@ -53,6 +55,20 @@ const authReducer = createSlice({
       .addCase(loginAsyncAction.rejected, (state) => {
         state.isLoading = false;
         state.hideInputBtn = false;
+        state.closeModal = false;
+      })
+
+
+      .addCase(registerAsyncAction.pending, (state) => {
+        state.isLoading = true;
+        state.closeModal = false;
+      })
+      .addCase(registerAsyncAction.fulfilled, (state) => {
+        state.isLoading = false;
+        state.closeModal = true;
+      })
+      .addCase(registerAsyncAction.rejected, (state) => {
+        state.isLoading = false;
         state.closeModal = false;
       })
   },
@@ -99,3 +115,34 @@ export const loginAsyncAction = createAsyncThunk("loginAsyncAction", async (user
   }
 }
 );
+
+export const registerAsyncAction = createAsyncThunk("registerAsyncAction", async (userRegister: UserRegisterFrm) => {
+  try{
+    const res = await httpNonAuth.post("/api/auth/signup", userRegister);
+    console.log("🚀 ~ file: authReducer.ts:107 ~ registerAsyncAction ~ res:", res)
+    toast.success('Đăng ký thành công!', {
+      position: "top-center",
+      autoClose: 400,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+    return res.data.content;
+  } catch (err){
+    toast.error('Đăng ký thất bại!', {
+      position: "top-center",
+      autoClose: 400,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+    //đảm bảo lỗi được truyền đi
+    throw err; 
+  }
+})

@@ -4,6 +4,8 @@ type Props = {}
 
 export default function Profile({}: Props) {
   return (
-    <div>Profile</div>
+    <div className="container mx-auto ">
+    <h1>sdsadsadsa</h1>
+</div>
   )
 }

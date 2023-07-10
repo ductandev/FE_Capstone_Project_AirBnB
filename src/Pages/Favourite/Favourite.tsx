@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 export default function Favourite({}: Props) {
   return (
-    <div>Favourite</div>
-  )
+  <div className="container mx-auto">
+      <h1>sdsadsadsa</h1>
+  </div>
+  );
+
 }

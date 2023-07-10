@@ -16,8 +16,9 @@ import * as yup from "yup";
 
 import { DispatchType } from "../../Redux/configStore";
 import { useDispatch } from "react-redux";
+import { registerAsyncAction } from "../../Redux/reducers/authReducer";
 
-export interface UserregisterFrm {
+export interface UserRegisterFrm {
   email: string;
   name: string;
   password: string;
@@ -31,20 +32,22 @@ const RegisterModal = () => {
   const loginModal = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
 
-  const registerFrm = useFormik<UserregisterFrm>({
+  const dispatch: DispatchType = useDispatch();
+
+  const registerFrm = useFormik<UserRegisterFrm>({
     initialValues: {
       email: "",
       name: "",
       password: "",
       phone: "",
       birthday: "",
-      gender:  true,
+      gender: true,
     },
     validationSchema: yup.object().shape({
       name: yup
         .string()
         .required("Họ và tên không được bỏ trống!")
-        .matches(/^[a-zA-Z\s]+$/, "Tên chỉ được chứa chữ cái."),
+        .matches(/^[a-z A-Z\s áàảạãăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệiíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵđ ÁÀẢẠÃĂẮẰẲẴẶÂẤẦẨẪẬÉÈẺẼẸÊẾỀỂỄỆIÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴĐ]+$/, "Tên chỉ được chứa chữ cái."),
       email: yup
         .string()
         .required("Email không được bỏ trống!")
@@ -57,27 +60,24 @@ const RegisterModal = () => {
       phone: yup
         .string()
         .required("Số điện thoại không được bỏ trống!")
+        .matches(/\d$/, "Vui lòng chỉ điền số!")
         .min(10, "Số điện tối thiểu là 10 số!")
-        .max(10, "Số điện tối đa là 10 số!")
-        .matches(/\d$/, 'Vui lòng chỉ điền số!'),
+        .max(10, "Số điện tối đa là 10 số!"),
       birthday: yup
         .string()
         .required("Ngày sinh không được bỏ trống!"),
-      gender: yup
-        .string()
-        .required("Giới tính không được bỏ trống!"),
     }),
-    onSubmit: (values: UserregisterFrm) => {
+    onSubmit: (values: UserRegisterFrm) => {
       console.log(values);
-      // const actionApi = loginAsyncAction(values);
-      // dispatch(actionApi);
-      // navigate("/");
+      const actionApi = registerAsyncAction(values);
+      dispatch(actionApi);
     },
   });
 
   const bodyContent = (
     <div>
       <Heading title="Chào mừng đến với" subtitle="Tạo tài khoản!" />
+
 
       <div className="rounded-t-xl overflow-hidden border border-gray-400">
         <Input
@@ -88,9 +88,12 @@ const RegisterModal = () => {
           onInput={registerFrm.handleChange}
         />
         {registerFrm.errors.name && (
-          <p className="text-rose-500 text-sm ms-4">{registerFrm.errors.name}</p>
+          <p className="text-rose-500 text-sm ms-4">
+            {registerFrm.errors.name}
+          </p>
         )}
       </div>
+
 
       <div className="overflow-hidden border border-gray-400 border-t-0">
         <Input
@@ -101,9 +104,12 @@ const RegisterModal = () => {
           onInput={registerFrm.handleChange}
         />
         {registerFrm.errors.email && (
-          <p className="text-rose-500 text-sm ms-4">{registerFrm.errors.email}</p>
+          <p className="text-rose-500 text-sm ms-4">
+            {registerFrm.errors.email}
+          </p>
         )}
       </div>
+
 
       <div className="overflow-hidden border border-gray-400 border-t-0">
         <Input
@@ -115,9 +121,12 @@ const RegisterModal = () => {
           onInput={registerFrm.handleChange}
         />
         {registerFrm.errors.password && (
-          <p className="text-rose-500 text-sm ms-4">{registerFrm.errors.password}</p>
+          <p className="text-rose-500 text-sm ms-4">
+            {registerFrm.errors.password}
+          </p>
         )}
       </div>
+
 
       <div className="overflow-hidden border border-gray-400 border-t-0">
         <Input
@@ -128,9 +137,12 @@ const RegisterModal = () => {
           onInput={registerFrm.handleChange}
         />
         {registerFrm.errors.phone && (
-          <p className="text-rose-500 text-sm ms-4">{registerFrm.errors.phone}</p>
+          <p className="text-rose-500 text-sm ms-4">
+            {registerFrm.errors.phone}
+          </p>
         )}
       </div>
+
 
       <div className="overflow-hidden border border-gray-400 border-t-0">
         <Input
@@ -139,25 +151,42 @@ const RegisterModal = () => {
           label="Ngày tháng năm sinh"
           disabled={isLoading}
           onInput={registerFrm.handleChange}
+          type="date"
         />
         {registerFrm.errors.birthday && (
-          <p className="text-rose-500 text-sm ms-4">{registerFrm.errors.password}</p>
+          <p className="text-rose-500 text-sm ms-4">
+            {registerFrm.errors.birthday}
+          </p>
         )}
       </div>
 
-      <div className="rounded-b-xl overflow-hidden border border-gray-400 border-t-0">
-        <Input
-          id="password"
-          name="password"
-          label="Giới tính"
-          disabled={isLoading}
+
+      <div className="rounded-b-xl overflow-hidden border border-gray-400 border-t-0  ps-4">
+        <p className="text-zinc-400">Giới tính</p>
+        <input
+          className="me-1 scale-125"
+          id="gender1"
+          name="gender"
+          type="radio"
+          value="true"
           onInput={registerFrm.handleChange}
-          type="date"
         />
-        {registerFrm.errors.password && (
-          <p className="text-rose-500 text-sm ms-4">{registerFrm.errors.password}</p>
-        )}
+        <label className="me-3" htmlFor="gender1">
+          Nam
+        </label>
+        <input
+          className="me-1 scale-125"
+          id="gender2"
+          name="gender"
+          type="radio"
+          value="false"
+          onInput={registerFrm.handleChange}
+        />
+        <label className="me-1" htmlFor="gender2">
+          Nữ
+        </label>
       </div>
+
     </div>
   );
 
