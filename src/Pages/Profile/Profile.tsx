@@ -1,11 +1,114 @@
-import React from "react";
-import {useNavigate} from  'react-router-dom'
+import React, { useCallback, useEffect, useState } from "react";
+import { USER_LOGIN, getStoreJson } from "../../Util/config";
+import { RiErrorWarningFill } from 'react-icons/ri'
+
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { DispatchType, RootState } from "../../Redux/configStore";
+import { useDispatch, useSelector } from "react-redux";
+import { changeProfileAsyncAction } from "../../Redux/reducers/userReducer";
+
+
 
 type Props = {};
 
+export interface UserProfileFrm {
+  id: number;
+  email: string;
+  name: string;
+  phone: string;
+  birthday: string;
+  gender: boolean;
+}
+
+
 export default function Profile({ }: Props) {
 
-  const navigate = useNavigate();
+  const storedUserLogin = getStoreJson(USER_LOGIN);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [isEditingPhone, setIsEditingPhone] = useState(false);
+  const [isEditingBirthday, setIsEditingBirthday] = useState(false);
+  const [isEditingGender, setIsEditingGender] = useState(false);
+
+  const {closeInput} = useSelector((state:RootState) => state.userReducer)
+  const dispatch: DispatchType = useDispatch();
+
+  const handleEditName = () => {
+    setIsEditingName(true);
+  }
+  const handleCancelName = () => {
+    setIsEditingName(false);
+  }
+  const handleEditEmail = () => {
+    setIsEditingEmail(true);
+  }
+  const handleCancelEmail = () => {
+    setIsEditingEmail(false);
+  }
+  const handleEditPhone = () => {
+    setIsEditingPhone(true);
+  }
+  const handleCancelPhone = () => {
+    setIsEditingPhone(false);
+  }
+  const handleEditBirthday = () => {
+    setIsEditingBirthday(true);
+  }
+  const handleCancelBirthday = () => {
+    setIsEditingBirthday(false);
+  }
+  const handleEditGender = () => {
+    setIsEditingGender(true);
+  }
+  const handleCancelGender = () => {
+    setIsEditingGender(false);
+  }
+
+  useEffect(()=>{
+    setTimeout(() => {
+      setIsEditingName(false);
+      setIsEditingEmail(false);
+      setIsEditingPhone(false);
+      setIsEditingBirthday(false);
+      setIsEditingGender(false);
+    }, 300);
+  },[closeInput])
+
+  const changeProfileFrm = useFormik<UserProfileFrm>({
+    initialValues: {
+      id: storedUserLogin?.user.id || "",
+      name: storedUserLogin?.user.name || "",
+      email: storedUserLogin?.user.email || "",
+      phone: storedUserLogin?.user.phone || "",
+      birthday: storedUserLogin?.user.birthday || "",
+      gender: storedUserLogin?.user.gender,
+    },
+    validationSchema: yup.object().shape({
+      name: yup
+        .string()
+        .required("Họ và tên không được bỏ trống!")
+        .matches(/^[a-z A-Z\s áàảạãăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệiíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵđ ÁÀẢẠÃĂẮẰẲẴẶÂẤẦẨẪẬÉÈẺẼẸÊẾỀỂỄỆIÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴĐ]+$/, "Tên chỉ được chứa chữ cái."),
+      email: yup
+        .string()
+        .required("Email không được bỏ trống!")
+        .email("Email không hợp lệ!"),
+      phone: yup
+        .string()
+        .required("Số điện thoại không được bỏ trống!")
+        .matches(/\d$/, "Vui lòng chỉ điền số!")
+        .min(10, "Số điện tối thiểu là 10 số!")
+        .max(10, "Số điện tối đa là 10 số!"),
+      birthday: yup
+        .string()
+        .required("Ngày sinh không được bỏ trống!"),
+    }),
+    onSubmit: (values: UserProfileFrm) => {
+      console.log(values);
+      const actionApi = changeProfileAsyncAction(values);
+      dispatch(actionApi);
+    },
+  });
 
 
   return (
@@ -13,72 +116,246 @@ export default function Profile({ }: Props) {
       <h1 className="text-[32px] font-extrabold text-[#484848] mb-8">
         Thông tin cá nhân
       </h1>
-      <div className="grid grid-cols-3 gap-3">
-        <div className="col-span-2 me-[88px]">
-          <div className="flex flex-col">
+      <div className="grid md:grid-cols-3 gap-3">
+        <div className="col-span-2 md:me-[20px] lg:me-[88px]">
+          <form onSubmit={changeProfileFrm.handleSubmit}>
+            <div className="flex flex-col">
 
-            <div className="flex flex-row items-start justify-between my-6">
-              <div>
-                <h2>Tên pháp lý</h2>
-                <p className="text-sm text-gray-500">Nguyễn đức tấn</p>
+
+              <input 
+                  id="id" 
+                  name="id" 
+                  className="hidden"
+                  onInput={changeProfileFrm.handleChange}
+                  onBlur={changeProfileFrm.handleChange}
+                  value={changeProfileFrm.values.id}
+              />
+              <div className="flex flex-row items-start justify-between mt-6">
+                <div>
+                  <h2>Tên pháp lý</h2>
+                </div>
+                <div>
+                  {isEditingName ? (
+                    <button type="button" className="text-black font-bold underline" onClick={handleCancelName}>Hủy</button>
+                  ) : (
+                    <button type="button" className="text-black font-bold underline" onClick={handleEditName}>Chỉnh sửa</button>
+                  )}
+                </div>
               </div>
-              <div>
-                <button className="text-black font-bold underline ">Chỉnh sửa</button>
+              {isEditingName ? (
+                <div>
+                  <p className="text-sm text-gray-500 mb-6">Đây là tên trên giấy tờ thông hành của bạn, có thể là giấy phép hoặc hộ chiếu.</p>
+                  <input
+                    id="name"
+                    name="name"
+                    onInput={changeProfileFrm.handleChange}
+                    onBlur={changeProfileFrm.handleBlur}
+                    value={changeProfileFrm.values.name}  //changeProfileFrm.values để hiển thị dữ liệu lên ô input.
+                    className="border-2 border-gray-300 w-full rounded p-3"
+                  />
+                  {/* VALIDATION NAME */}
+                  {changeProfileFrm.errors.name && (
+                    <p className="text-rose-500 text-sm">
+                      <span className="flex items-center">
+                        <RiErrorWarningFill /> &nbsp;
+                        {changeProfileFrm.errors.name}
+                      </span>
+                    </p>
+                  )}
+                  <button type="submit" className="text-white bg-black rounded-xl px-[24px] py-[14px] font-bold block my-4">Lưu</button>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 mb-6">
+                  {storedUserLogin?.user.name}
+                </p>
+              )}
+              <hr />
+
+
+
+              <div className="flex flex-row items-start justify-between mt-6">
+                <div>
+                  <h2>Địa chỉ email</h2>
+                </div>
+                <div>
+                  {isEditingEmail ? (
+                    <button type="button" className="text-black font-bold underline" onClick={handleCancelEmail}>Hủy</button>
+                  ) : (
+                    <button type="button" className="text-black font-bold underline" onClick={handleEditEmail}>Chỉnh sửa</button>
+                  )}
+                </div>
               </div>
+              {isEditingEmail ? (
+                <div>
+                  <p className="text-sm text-gray-500 mb-6">Sử dụng địa chỉ mà bạn luôn có quyền truy cập.</p>
+                  <input
+                    id="email"
+                    name="email"
+                    onInput={changeProfileFrm.handleChange}
+                    onBlur={changeProfileFrm.handleChange}
+                    value={changeProfileFrm.values.email} //changeProfileFrm.values để hiển thị dữ liệu lên ô input.
+                    className="border-2 border-gray-300 w-full rounded p-3"
+                  />
+                  {/* VALIDATION NAME */}
+                  {changeProfileFrm.errors.email && (
+                    <p className="text-rose-500 text-sm">
+                      <span className="flex items-center">
+                        <RiErrorWarningFill /> &nbsp;
+                        {changeProfileFrm.errors.email}
+                      </span>
+                    </p>
+                  )}
+                  <button type="submit" className="text-white bg-black rounded-xl px-[24px] py-[14px] font-bold block my-4">Lưu</button>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 mb-6">
+                  {storedUserLogin?.user.email}
+                </p>
+              )}
+              <hr />
+
+
+
+              <div className="flex flex-row items-start justify-between mt-6">
+                <div>
+                  <h2>Số điện thoại</h2>
+                </div>
+                <div>
+                  {isEditingPhone ? (
+                    <button type="button" className="text-black font-bold underline" onClick={handleCancelPhone}>Hủy</button>
+                  ) : (
+                    <button type="button" className="text-black font-bold underline" onClick={handleEditPhone}>Chỉnh sửa</button>
+                  )}
+                </div>
+              </div>
+              {isEditingPhone ? (
+                <div>
+                  <p className="text-sm text-gray-500 mb-6">Thêm số điện thoại để khách đã xác nhận và Airbnb có thể liên hệ với bạn. Bạn có thể thêm các số điện thoại khác và chọn mục đích sử dụng tương ứng.</p>
+                  <input
+                    id="phone"
+                    name="phone"
+                    onInput={changeProfileFrm.handleChange}
+                    onBlur={changeProfileFrm.handleChange}
+                    value={changeProfileFrm.values.phone}
+                    className="border-2 border-gray-300 w-full rounded p-3"
+                  />
+                  {/* VALIDATION NAME */}
+                  {changeProfileFrm.errors.phone && (
+                    <p className="text-rose-500 text-sm">
+                      <span className="flex items-center">
+                        <RiErrorWarningFill /> &nbsp;
+                        {changeProfileFrm.errors.phone}
+                      </span>
+                    </p>
+                  )}
+                  <button type="submit" className="text-white bg-black rounded-xl px-[24px] py-[14px] font-bold block my-4">Lưu</button>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 mb-6">
+                  {storedUserLogin?.user.phone}
+                </p>
+              )}
+              <hr />
+
+
+
+              <div className="flex flex-row items-start justify-between mt-6">
+                <div>
+                  <h2>Ngày tháng năm sinh</h2>
+                </div>
+                <div>
+                  {isEditingBirthday ? (
+                    <button type="button" className="text-black font-bold underline" onClick={handleCancelBirthday}>Hủy</button>
+                  ) : (
+                    <button type="button" className="text-black font-bold underline" onClick={handleEditBirthday}>Chỉnh sửa</button>
+                  )}
+                </div>
+              </div>
+              {isEditingBirthday ? (
+                <div>
+                  <p className="text-sm text-gray-500 mb-6">Sửa lại ngày tháng năm sinh của bạn.</p>
+                  <input
+                    id="birthday"
+                    name="birthday"
+                    onInput={changeProfileFrm.handleChange}
+                    onBlur={changeProfileFrm.handleChange}
+                    value={changeProfileFrm.values.birthday}
+                    className="border-2 border-gray-300 w-full rounded p-3"
+                  />
+                  {/* VALIDATION NAME */}
+                  {changeProfileFrm.errors.birthday && (
+                    <p className="text-rose-500 text-sm">
+                      <span className="flex items-center">
+                        <RiErrorWarningFill /> &nbsp;
+                        {changeProfileFrm.errors.birthday}
+                      </span>
+                    </p>
+                  )}
+                  <button type="submit" className="text-white bg-black rounded-xl px-[24px] py-[14px] font-bold block my-4">Lưu</button>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 mb-6">
+                  {storedUserLogin?.user.birthday}
+                </p>
+              )}
+              <hr />
+
+
+
+              <div className="flex flex-row items-start justify-between mt-6">
+                <div>
+                  <h2>Giới tính</h2>
+                </div>
+                <div>
+                  {isEditingGender ? (
+                    <button type="button" className="text-black font-bold underline" onClick={handleCancelGender}>Hủy</button>
+                  ) : (
+                    <button type="button" className="text-black font-bold underline" onClick={handleEditGender}>Chỉnh sửa</button>
+                  )}
+                </div>
+              </div>
+              {isEditingGender ? (
+                <div>
+                  <p className="text-sm text-gray-500 mb-6">Sửa lại giới tính của bạn</p>
+                  <div className="mt-4 rounded-md border-2 border-gray-300 py-1 px-2">
+                    <label className="text-xs font-light text-dark-gray">
+                      {" "}
+                      Giới tính
+                    </label>
+                    <select
+                      id="gender"
+                      name="gender"
+                      onInput={changeProfileFrm.handleChange}
+                      onBlur={changeProfileFrm.handleChange}
+                      value={changeProfileFrm.values.gender.toString()}
+                      className="w-full font-light">
+                      <option value="true">Nam</option>
+                      <option value="false">Nữ</option>
+                    </select>
+                  </div>
+
+                  {/* VALIDATION NAME */}
+                  {changeProfileFrm.errors.gender && (
+                    <p className="text-rose-500 text-sm">
+                      <span className="flex items-center">
+                        <RiErrorWarningFill /> &nbsp;
+                        {changeProfileFrm.errors.gender}
+                      </span>
+                    </p>
+                  )}
+                  <button type="submit" className="text-white bg-black rounded-xl px-[24px] py-[14px] font-bold block my-4">Lưu</button>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 mb-6">
+                  {storedUserLogin?.user.gender ? "Nam" : "Nữ"}
+                </p>
+              )}
+              <hr />
+
+
+
             </div>
-            <hr />
-
-
-            <div className="flex flex-row items-start justify-between my-6">
-              <div>
-                <h2>Địa chỉ email</h2>
-                <p className="text-sm text-gray-500">duc***@gmail.com</p>
-              </div>
-              <div>
-                <button className="text-black font-bold underline ">Chỉnh sửa</button>
-              </div>
-            </div>
-            <hr />
-
-
-            <div className="flex flex-row items-start justify-between my-6">
-              <div>
-                <h2>Số điện thoại</h2>
-                <p className="text-sm text-gray-500">0908246133</p>
-              </div>
-              <div>
-                <button className="text-black font-bold underline ">Chỉnh sửa</button>
-              </div>
-            </div>
-            <hr />
-
-
-            <div className="flex flex-row items-start justify-between my-6">
-              <div>
-                <h2>Ngày tháng năm sinh</h2>
-                <p className="text-sm text-gray-500">16/04/1998</p>
-              </div>
-              <div>
-                <button className="text-black font-bold underline ">Chỉnh sửa</button>
-              </div>
-            </div>
-            <hr />
-
-
-            <div className="flex flex-row items-start justify-between my-6">
-              <div>
-                <h2>Giới tính</h2>
-                <p className="text-sm text-gray-500">nam</p>
-              </div>
-              <div>
-                <button className="text-black font-bold underline ">Chỉnh sửa</button>
-              </div>
-            </div>
-            <hr />
-
-
-
-          </div>
+          </form>
         </div>
 
 

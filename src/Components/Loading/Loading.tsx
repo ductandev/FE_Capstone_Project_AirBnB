@@ -8,6 +8,7 @@ type Props = {};
 
 export default function Loading({ }: Props) {
   const { isLoading } = useSelector((state: RootState) => state.authReducer);
+  const {isLoadingChangeProfile} =  useSelector((state:RootState) => state.userReducer)
 
   return (
     <div
@@ -17,7 +18,7 @@ export default function Loading({ }: Props) {
         height: "100%",
         zIndex: 10,
         background: "#e8e8e8",
-        display: isLoading ? "flex" : "none",
+        display: isLoading || isLoadingChangeProfile ? "flex" : "none",
         justifyContent: "center",
         alignItems: "center",
         left: 0,
