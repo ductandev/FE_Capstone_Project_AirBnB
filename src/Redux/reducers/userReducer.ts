@@ -66,8 +66,6 @@ export const changeProfileAsyncAction = createAsyncThunk("changeProfileAsyncActi
   try {
     const res = await httpNonAuth.put(`/api/users/${changeUserProfiles.id}`, changeUserProfiles);
 
-    console.log("🚀 ~ file: userReducer.ts:64 ~ changeProfileAsyncAction ~ res:", res)
-
     const userLoginData = getStoreJson(USER_LOGIN);
     // Kiểm tra nếu có dữ liệu trong key "userLogin"
     if (userLoginData) {

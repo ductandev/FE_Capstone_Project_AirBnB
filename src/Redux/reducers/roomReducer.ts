@@ -1,58 +1,76 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { DispatchType } from '../configStore';
-import { httpNonAuth } from '../../Util/config';
-import axios from 'axios';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { httpNonAuth } from "../../Util/config";
 
 export interface Room {
-    id:       number;
-    tenPhong: string;
-    khach:    number;
-    phongNgu: number;
-    giuong:   number;
-    phongTam: number;
-    moTa:     string;
-    giaTien:  number;
-    mayGiat:  boolean;
-    banLa:    boolean;
-    tivi:     boolean;
-    dieuHoa:  boolean;
-    wifi:     boolean;
-    bep:      boolean;
-    doXe:     boolean;
-    hoBoi:    boolean;
-    banUi:    boolean;
-    maViTri:  number;
-    hinhAnh:  string;
+  id: number;
+  tenPhong: string;
+  khach: number;
+  phongNgu: number;
+  giuong: number;
+  phongTam: number;
+  moTa: string;
+  giaTien: number;
+  mayGiat: boolean;
+  banLa: boolean;
+  tivi: boolean;
+  dieuHoa: boolean;
+  wifi: boolean;
+  bep: boolean;
+  doXe: boolean;
+  hoBoi: boolean;
+  banUi: boolean;
+  maViTri: number;
+  hinhAnh: string;
 }
 
-export interface RoomState{
-    arrAllRoom: Room[]
+export interface RoomState {
+  arrAllRoom: Room[];
+  isLoadingRoomAPI: boolean;
 }
 
 const initialState = {
-    arrAllRoom: []
-}
+  arrAllRoom: [],
+  isLoadingRoomAPI: false,
+};
 
 const roomReducer = createSlice({
-  name: 'roomReducer',
+  name: "roomReducer",
   initialState,
-  reducers: {
-    getAllRoomAction: (state:RoomState, action:PayloadAction<Room[]>) =>{
-        state.arrAllRoom = action.payload
-    }
-  }
+  reducers: {},
+  // getAllRoomAction: (state:RoomState, action:PayloadAction<Room[]>) =>{
+  //     state.arrAllRoom = action.payload
+  extraReducers: (builder) => {
+    builder
+      .addCase(getDataAllRoomAsyncAction.pending, (state) => {
+        state.isLoadingRoomAPI = true;
+      })
+      .addCase(getDataAllRoomAsyncAction.fulfilled, (state, action) => {
+        state.isLoadingRoomAPI = false;
+        state.arrAllRoom = action.payload;
+      })
+      .addCase(getDataAllRoomAsyncAction.rejected, (state) => {
+        state.isLoadingRoomAPI = false;
+      });
+  },
 });
 
-export const {getAllRoomAction} = roomReducer.actions
+export const {} = roomReducer.actions;
 
-export default roomReducer.reducer
+export default roomReducer.reducer;
 
 // ---------------- action async --------------
-export const getDataAllRoomAPi = (pageIndex: number, pageSize: number) => {
-    return async (dispatch: DispatchType) => {
-        const res = await httpNonAuth.get(`/api/phong-thue/phan-trang-tim-kiem?pageIndex=${pageIndex}&pageSize=${pageSize}`);
- 
-        const action: PayloadAction<Room[]> = getAllRoomAction(res.data.content.data);
-        dispatch(action);
+export const getDataAllRoomAsyncAction = createAsyncThunk(
+  "getDataAllRoomAsyncAction",
+  async ({ pageIndex, pageSize }: { pageIndex: number; pageSize: number }) => {
+    try {
+      const res = await httpNonAuth.get(
+        `/api/phong-thue/phan-trang-tim-kiem?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      );
+
+      return res.data.content.data;
+    } catch (err) {
+      console.log(err);
+      throw err;
     }
-}
+  }
+);

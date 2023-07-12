@@ -1,43 +1,60 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { DispatchType } from '../configStore';
-import { httpNonAuth } from '../../Util/config';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { httpNonAuth } from "../../Util/config";
 
-export interface Location{
-  id:        number;
-  tenViTri:  string;
+export interface Location {
+  id: number;
+  tenViTri: string;
   tinhThanh: string;
-  quocGia:   string;
-  hinhAnh:   string;
+  quocGia: string;
+  hinhAnh: string;
 }
 
-export interface LocationState{
-  arrLocation: Location[]
+export interface LocationState {
+  arrLocation: Location[];
+  isLoadingLocationAPI: boolean;
 }
 
 const initialState = {
-  arrLocation: []
-}
+  arrLocation: [],
+  isLoadingLocationAPI: false,
+};
 
 const locationReducer = createSlice({
-  name: 'locationReducer',
+  name: "locationReducer",
   initialState,
-  reducers: {
-    getLocationAction: (state:LocationState, action:PayloadAction<Location[]>) => {
-      state.arrLocation = action.payload
-    }
-  }
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getDataLocationAsyncAction.pending, (state) => {
+        state.isLoadingLocationAPI = true;
+      })
+      .addCase(getDataLocationAsyncAction.fulfilled, (state, action) => {
+        state.isLoadingLocationAPI = false;
+        state.arrLocation = action.payload;
+      })
+      .addCase(getDataLocationAsyncAction.rejected, (state) => {
+        state.isLoadingLocationAPI = false;
+      });
+  },
 });
 
-export const {getLocationAction} = locationReducer.actions
+export const {} = locationReducer.actions;
 
-export default locationReducer.reducer
+export default locationReducer.reducer;
 
 // ---------------- action async --------------
-export const getDataLocation = (pageIndex: number, pageSize: number) => {
-  return async (dispatch: DispatchType) => {
-      const res = await httpNonAuth.get(`/api/vi-tri/phan-trang-tim-kiem?pageIndex=${pageIndex}&pageSize=${pageSize}`);
+export const getDataLocationAsyncAction = createAsyncThunk(
+  "getDataLocationAsyncAction",
+  async ({ pageIndex, pageSize }: { pageIndex: number; pageSize: number }) => {
+    try {
+      const res = await httpNonAuth.get(
+        `/api/vi-tri/phan-trang-tim-kiem?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      );
 
-      const action: PayloadAction<Location[]> = getLocationAction(res.data.content.data);
-      dispatch(action);
+      return res.data.content.data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
-}
+);

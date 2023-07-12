@@ -34,14 +34,14 @@ export interface UserLoginApi {
 
 export interface UserState {
   userLogin: UserLoginApi | undefined;
-  isLoading: boolean;
+  isLoadingAuth: boolean;
   hideInputBtn: boolean;
   closeModal: boolean;
 }
 
 const initialState: UserState = {
   userLogin: getStoreJson(USER_LOGIN),
-  isLoading: false,
+  isLoadingAuth: false,
   hideInputBtn: false,
   closeModal: false,
 };
@@ -61,32 +61,32 @@ const authReducer = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loginAsyncAction.pending, (state) => {
-        state.isLoading = true;
+        state.isLoadingAuth = true;
         state.closeModal = false;
       })
       .addCase(loginAsyncAction.fulfilled, (state, action) => {
         state.userLogin = action.payload;
-        state.isLoading = false;
+        state.isLoadingAuth = false;
         state.hideInputBtn = true;
         state.closeModal = true;
       })
       .addCase(loginAsyncAction.rejected, (state) => {
-        state.isLoading = false;
+        state.isLoadingAuth = false;
         state.hideInputBtn = false;
         state.closeModal = false;
       })
 
 
       .addCase(registerAsyncAction.pending, (state) => {
-        state.isLoading = true;
+        state.isLoadingAuth = true;
         state.closeModal = false;
       })
       .addCase(registerAsyncAction.fulfilled, (state) => {
-        state.isLoading = false;
+        state.isLoadingAuth = false;
         state.closeModal = true;
       })
       .addCase(registerAsyncAction.rejected, (state) => {
-        state.isLoading = false;
+        state.isLoadingAuth = false;
         state.closeModal = false;
       })
   },

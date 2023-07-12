@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DispatchType, RootState } from "../../Redux/configStore";
 
-import { Room, getDataAllRoomAPi } from "../../Redux/reducers/roomReducer";
+import { Room, getDataAllRoomAsyncAction } from "../../Redux/reducers/roomReducer";
 import {
   Location,
-  getDataLocation,
+  getDataLocationAsyncAction,
 } from "../../Redux/reducers/locationReducer";
 
 import ListingCard from "../../Components/ListingCard/ListingCard";
@@ -60,12 +60,12 @@ export default function Home({}: Props) {
 
   // ====CALL API====
   const getDataListingRoom = async (pageIndex:number, pageSize:number):Promise<void> => {
-    const actionApi = getDataAllRoomAPi(pageIndex, pageSize);
+    const actionApi = getDataAllRoomAsyncAction({pageIndex, pageSize});
     dispatch(actionApi);
   };
 
   const getDataListingLocation = async (pageIndex:number, pageSize:number):Promise<void> => {
-    const actionApi = getDataLocation(pageIndex, pageSize);
+    const actionApi = getDataLocationAsyncAction({pageIndex, pageSize});
     dispatch(actionApi);
   };
 
