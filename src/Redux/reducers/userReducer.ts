@@ -79,6 +79,7 @@ export const changeProfileAsyncAction = createAsyncThunk("changeProfileAsyncActi
 
   } catch (err) {
     toast.error('Thay đổi thất bại!', toastOptions);
+    console.log("🚀 ~ file: userReducer.ts:81 ~ changeProfileAsyncAction ~ err:", err)
     // Đảm bảo lỗi được truyền đi
     throw (err)
   }

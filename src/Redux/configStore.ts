@@ -3,6 +3,7 @@ import roomReducer from './reducers/roomReducer';
 import locationReducer from './reducers/locationReducer';
 import authReducer from './reducers/authReducer';
 import userReducer from './reducers/userReducer';
+import bookRoomReducer from './reducers/bookRoomReducer';
 
 
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
     roomReducer: roomReducer,
     authReducer: authReducer,
     userReducer: userReducer,
+    bookRoomReducer: bookRoomReducer,
   }
 });
 

@@ -50,7 +50,7 @@ export default function UserMenu({ }: Props) {
 
     const handleTripHistory = useCallback(() => {
         setIsOpen(false);
-        navigate('/trips-history');
+        navigate('/trips');
     }, [setIsOpen, navigate]);
 
     const handleFavourite = useCallback(() => {

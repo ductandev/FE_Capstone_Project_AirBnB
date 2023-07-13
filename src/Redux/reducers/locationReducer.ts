@@ -53,7 +53,7 @@ export const getDataLocationAsyncAction = createAsyncThunk(
 
       return res.data.content.data;
     } catch (err) {
-      console.log(err);
+      console.log("🚀 ~ file: locationReducer.ts:56 ~ err:", err)
       throw err;
     }
   }

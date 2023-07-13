@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DispatchType, RootState } from "../../Redux/configStore";
 
-import { Room, getDataAllRoomAsyncAction } from "../../Redux/reducers/roomReducer";
+import { Room, getDataPanigationAsyncAction } from "../../Redux/reducers/roomReducer";
 import {
   Location,
   getDataLocationAsyncAction,
@@ -52,7 +52,7 @@ export default function Home({}: Props) {
     },
   };
 
-  const { arrAllRoom } = useSelector((state: RootState) => state.roomReducer);
+  const { arrPanigation } = useSelector((state: RootState) => state.roomReducer);
   const { arrLocation } = useSelector(
     (state: RootState) => state.locationReducer
   );
@@ -60,7 +60,7 @@ export default function Home({}: Props) {
 
   // ====CALL API====
   const getDataListingRoom = async (pageIndex:number, pageSize:number):Promise<void> => {
-    const actionApi = getDataAllRoomAsyncAction({pageIndex, pageSize});
+    const actionApi = getDataPanigationAsyncAction({pageIndex, pageSize});
     dispatch(actionApi);
   };
 
@@ -75,7 +75,7 @@ export default function Home({}: Props) {
   }, []);
 
   const renderAllRoom = (): JSX.Element[] => {
-    return arrAllRoom.map((item: Room, index) => {
+    return arrPanigation.map((item: Room, index) => {
       return (
         <div key={item.id}>
           <ListingCard room={item} />

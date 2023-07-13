@@ -110,6 +110,7 @@ export const loginAsyncAction = createAsyncThunk("loginAsyncAction", async (user
 
   } catch (err) {
     toast.error('Đăng nhập thất bại!', toastOptions);
+    console.log("🚀 ~ file: authReducer.ts:112 ~ loginAsyncAction ~ err:", err)
     //đảm bảo lỗi được truyền đi
     throw err;
   }
@@ -126,6 +127,7 @@ export const registerAsyncAction = createAsyncThunk("registerAsyncAction", async
 
   } catch (err){
     toast.error('Đăng ký thất bại!', toastOptions);
+    console.log("🚀 ~ file: authReducer.ts:128 ~ registerAsyncAction ~ err:", err)
     //đảm bảo lỗi được truyền đi
     throw err; 
   }

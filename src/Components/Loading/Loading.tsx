@@ -18,6 +18,7 @@ export default function Loading({}: Props) {
   const { isLoadingLocationAPI } = useSelector(
     (state: RootState) => state.locationReducer
   );
+    const {isLoadingTripHistory} = useSelector((state:RootState) => state.bookRoomReducer)
 
   return (
     <div
@@ -31,7 +32,8 @@ export default function Loading({}: Props) {
           isLoadingAuth ||
           isLoadingChangeProfile ||
           isLoadingRoomAPI ||
-          isLoadingLocationAPI
+          isLoadingLocationAPI ||
+          isLoadingTripHistory
             ? "flex"
             : "none",
         justifyContent: "center",

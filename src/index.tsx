@@ -34,7 +34,7 @@ root.render(
             <Route path=':id' element={<ResponsiveItem component={Detail} largeTableComponent={DetailMobile} />}></Route>
           </Route>
           <Route path="profile" element={<Profile/>}></Route>
-          <Route path="trips-history" element={<TripHistory/>}></Route>
+          <Route path="trips" element={<TripHistory/>}></Route>
           <Route path="favourite" element={<Favourite />} />
           <Route path="search" element={<Search />} />
 
