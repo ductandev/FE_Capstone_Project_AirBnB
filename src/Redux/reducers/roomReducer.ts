@@ -52,6 +52,7 @@ const roomReducer = createSlice({
         state.isLoadingRoomAPI = false;
       })
 
+
       .addCase(getDataAllRoomAsyncAction.pending, (state) => {
         state.isLoadingRoomAPI = true;
       })
@@ -60,6 +61,18 @@ const roomReducer = createSlice({
         state.arrAllRoom = action.payload;
       })
       .addCase(getDataAllRoomAsyncAction.rejected, (state) => {
+        state.isLoadingRoomAPI = false;
+      })
+
+
+      .addCase(getDataRoomLocationAsyncAction.pending, (state) => {
+        state.isLoadingRoomAPI = true;
+      })
+      .addCase(getDataRoomLocationAsyncAction.fulfilled, (state, action) => {
+        state.isLoadingRoomAPI = false;
+        state.arrPanigation = action.payload;
+      })
+      .addCase(getDataRoomLocationAsyncAction.rejected, (state) => {
         state.isLoadingRoomAPI = false;
       });
       
@@ -95,6 +108,18 @@ export const getDataAllRoomAsyncAction = createAsyncThunk("getDataAllRoomAsyncAc
     return res.data.content;
   } catch (err){
     console.log("🚀 ~ file: roomReducer.ts:84 ~ getDataAllRoomAsyncAction ~ err:", err)
+    throw err;
+  }
+})
+
+export const getDataRoomLocationAsyncAction = createAsyncThunk("getDataRoomLocationAsyncAction", async(id:number)=>{
+  try{
+    const res = await httpNonAuth.get(`/api/phong-thue/lay-phong-theo-vi-tri?maViTri=${id}`)
+    console.log("🚀 ~ file: roomReducer.ts:118 ~ getDataRoomLocationAsyncAction ~ res:", res)
+
+    return res.data.content;
+  } catch (err){
+    console.log("🚀 ~ file: roomReducer.ts:122 ~ getDataRoomLocationAsyncAction ~ err:", err)
     throw err;
   }
 })
