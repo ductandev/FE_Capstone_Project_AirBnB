@@ -117,7 +117,7 @@ export default function TripHistory({ }: Props) {
 
   return (
     <div className="container mx-auto">
-      <h1 className="pt-9 pb-6 text-4xl font-semibold">Lịch sử chuyến đi</h1>
+      <h1 className="pt-9 pb-6 text-4xl font-bold  text-[#484848]">Lịch sử chuyến đi</h1>
       <hr />
 
       <div className="pt-8 pb-12">{renderTripHistory()}</div>

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { UserProfileFrm } from '../../Pages/Profile/Profile';
 import { ToastOptions, toast } from 'react-toastify';
-import { USER_LOGIN, clearStorage, getStoreJson, httpNonAuth, setStore, setStoreJson } from '../../Util/config';
+import { USER_LOGIN, getStoreJson, httpNonAuth, setStoreJson } from '../../Util/config';
 
 const toastOptions: ToastOptions<{}> = {
   position: "top-center",
