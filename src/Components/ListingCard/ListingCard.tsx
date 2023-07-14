@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Room } from "../../Redux/reducers/roomReducer";
 import { BsFillStarFill, BsStarHalf } from 'react-icons/bs'
 import { ToastOptions, toast } from 'react-toastify';
+import { getStoreJson, setStore, setStoreJson } from "../../Util/config";
 
 type Props = {
     room: Room;
@@ -10,7 +11,7 @@ type Props = {
 
 const toastOptions: ToastOptions<{}> = {
     position: "top-center",
-    autoClose: 400,
+    autoClose: 200,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -23,12 +24,41 @@ export default function ListingCard({ room }: Props) {
 
     const [isRed, setIsRed] = useState(false);
 
+    
+    useEffect(() => {
+      const storedFavouriteRooms: Room[] | null = getStoreJson('favourite');
+      if (Array.isArray(storedFavouriteRooms)) {
+        // `.some()`: kiểm tra xem có ít nhất một phần tử trong mảng thỏa mãn một điều kiện nhất định hay không
+        setIsRed(storedFavouriteRooms.some(favouriteRoom => favouriteRoom.id === room.id));
+      }
+    }, [room.id]);
+
+  
     const handleClick = () => {
-        setIsRed((preveState) => !preveState);
-        if(!isRed){
-            toast.success("Đã thêm vào yêu thích", toastOptions)
+      const storedFavouriteRooms: Room[] | null = getStoreJson('favourite');
+      let updatedFavouriteRooms: Room[] = [];
+  
+      if (Array.isArray(storedFavouriteRooms)) {
+        if (storedFavouriteRooms.some(favouriteRoom => favouriteRoom.id === room.id)) {
+          updatedFavouriteRooms = storedFavouriteRooms.filter(favouriteRoom => favouriteRoom.id !== room.id);
+          setIsRed(false);
+          toast.error("Đã bỏ thích", toastOptions);
+        } else {
+          updatedFavouriteRooms = [...storedFavouriteRooms, room];
+          setIsRed(true);
+          toast.success("Đã thêm vào yêu thích", toastOptions);
         }
-    }
+      } else {
+        updatedFavouriteRooms = [room];
+        setIsRed(true);
+        toast.success("Đã thêm vào yêu thích", toastOptions);
+      }
+  
+      setStoreJson("favourite", updatedFavouriteRooms);
+    };
+      
+      
+      
 
     return (
         <div className="
@@ -84,6 +114,8 @@ export default function ListingCard({ room }: Props) {
                     </div>
                 </div>
             </NavLink>
+
+            {/* FAVOUTIRE */}
             <button
                 className="absolute top-1 right-3"
                 onClick={handleClick}

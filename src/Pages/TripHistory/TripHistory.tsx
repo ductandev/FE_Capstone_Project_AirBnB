@@ -13,9 +13,7 @@ type Props = {};
 
 export default function TripHistory({ }: Props) {
   const storedUserLogin = getStoreJson(USER_LOGIN);
-  const { arrTripHistory } = useSelector(
-    (state: RootState) => state.bookRoomReducer
-  );
+  const { arrTripHistory } = useSelector((state: RootState) => state.bookRoomReducer);
   const { arrAllRoom } = useSelector((state: RootState) => state.roomReducer);
   const dispatch: DispatchType = useDispatch();
 
