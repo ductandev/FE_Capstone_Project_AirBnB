@@ -24,15 +24,17 @@ export interface Room {
 }
 
 export interface RoomState {
-  arrAllRoom: Room[];
-  arrPanigation: Room[];
-  isLoadingRoomAPI: boolean;
+  arrAllRoom: Room[]
+  arrPanigation: Room[]
+  roomDetail: Room | null;
+  isLoadingRoomAPI: boolean
 }
 
-const initialState = {
+const initialState: RoomState = {
   arrAllRoom: [],
   arrPanigation: [],
   isLoadingRoomAPI: false,
+  roomDetail: null,
 };
 
 const roomReducer = createSlice({
@@ -74,6 +76,18 @@ const roomReducer = createSlice({
       })
       .addCase(getDataRoomLocationAsyncAction.rejected, (state) => {
         state.isLoadingRoomAPI = false;
+      })
+
+
+      .addCase(getDataRoomIdAsyncAction.pending, (state) => {
+        state.isLoadingRoomAPI = true;
+      })
+      .addCase(getDataRoomIdAsyncAction.fulfilled, (state, action) => {
+        state.isLoadingRoomAPI = false;
+        state.roomDetail = action.payload;
+      })
+      .addCase(getDataRoomIdAsyncAction.rejected, (state) => {
+        state.isLoadingRoomAPI = false;
       });
       
   },
@@ -101,6 +115,7 @@ export const getDataPanigationAsyncAction = createAsyncThunk(
 );
 
 
+// API dùng để filter cho TripHistory.tsx để lọc ra danh sách lịch sử đã đi
 export const getDataAllRoomAsyncAction = createAsyncThunk("getDataAllRoomAsyncAction", async()=>{
   try{
     const res = await httpNonAuth.get("/api/phong-thue")
@@ -112,14 +127,26 @@ export const getDataAllRoomAsyncAction = createAsyncThunk("getDataAllRoomAsyncAc
   }
 })
 
+
 export const getDataRoomLocationAsyncAction = createAsyncThunk("getDataRoomLocationAsyncAction", async(id:number)=>{
   try{
     const res = await httpNonAuth.get(`/api/phong-thue/lay-phong-theo-vi-tri?maViTri=${id}`)
-    console.log("🚀 ~ file: roomReducer.ts:118 ~ getDataRoomLocationAsyncAction ~ res:", res)
 
     return res.data.content;
   } catch (err){
     console.log("🚀 ~ file: roomReducer.ts:122 ~ getDataRoomLocationAsyncAction ~ err:", err)
+    throw err;
+  }
+})
+
+
+export const getDataRoomIdAsyncAction = createAsyncThunk("getDataRoomIdAsyncAction", async(idRoom:string) => {
+  try {
+    const res = await httpNonAuth.get(`/api/phong-thue/${idRoom}`)
+
+    return res.data.content;
+  } catch (err) {
+    console.log("🚀 ~ file: roomReducer.ts:135 ~ getDataRoomIdAsyncAction ~ err:", err)
     throw err;
   }
 })

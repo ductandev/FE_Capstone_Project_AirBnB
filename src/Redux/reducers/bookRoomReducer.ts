@@ -16,7 +16,7 @@ export interface BookRoomState {
 }
 
 
-const initialState = {
+const initialState:BookRoomState = {
     arrTripHistory: [],
     isLoadingTripHistory: false,
 };

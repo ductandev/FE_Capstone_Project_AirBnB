@@ -4,6 +4,7 @@ import locationReducer from './reducers/locationReducer';
 import authReducer from './reducers/authReducer';
 import userReducer from './reducers/userReducer';
 import bookRoomReducer from './reducers/bookRoomReducer';
+import commentReducer from './reducers/commentReducer';
 
 
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
     authReducer: authReducer,
     userReducer: userReducer,
     bookRoomReducer: bookRoomReducer,
+    commentReducer: commentReducer,
   }
 });
 

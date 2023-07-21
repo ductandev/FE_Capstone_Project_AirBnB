@@ -30,7 +30,7 @@ export interface userProfileState {
   closeInput: boolean;
 }
 
-const initialState = {
+const initialState:userProfileState = {
   isLoadingChangeProfile: false,
   closeInput: false
 }

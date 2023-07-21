@@ -5,11 +5,11 @@
 /* GLOBAL */
 html,
 body,
-:root{
+:root {
   font-size: 16px;
   height: 100%;
 }
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -20,34 +20,73 @@ body {
   grid-template-rows: 1fr 10rem auto;
   grid-template-areas: "main" "." "footer";
   overflow-x: hidden;
-  background: #F5F7FA;
+  background: #f5f7fa;
   min-height: 100vh;
   font-family: "nunito", sans-serif;
   scroll-behavior: smooth;
 }
 
-
 /* ================================= */
 /* -------------Owlcarousel-------------- */
-.owl-nav{
+.owl-nav {
   display: none;
 }
-.owl-prev,.owl-next{
+.owl-prev,
+.owl-next {
   display: none;
 }
-.owl-prev span,.owl-next span{
+.owl-prev span,
+.owl-next span {
   display: none;
 }
-.owl-dots{
+.owl-dots {
   display: none;
 }
 
+/* ================================= */
+/* -------------React-date-range-------------- */
+.leaflet-bottom,
+.leaflet-control,
+.leaflet-pane,
+.leaflet-top {
+  z-index: 0 !important;
+}
+
+.rdrMonth {
+  width: 100% !important;
+}
+.rdrWeekDay{
+  color: black !important;
+  font-weight: 600;
+}
+.rdrDayNumber{
+  font-weight: 500 !important;
+}
+.rdrCalendarWrapper {
+  font-size: 14px !important;
+  width: 100% !important;
+  position: relative;
+}
+.rdrMonthName {
+  color: black !important;
+  text-align: center !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+}
+.rdrMonthAndYearPickers {
+  display: none !important;
+}
+.rdrMonthAndYearWrapper {
+  position: absolute;
+  width: 100%;
+  
+}
 
 /* ================================= */
 /* -------------FOOTER-------------- */
 body .footer {
   z-index: 1;
-  --footer-background: #ED5565;
+  --footer-background: #ed5565;
   display: grid;
   position: relative;
   grid-area: footer;
@@ -69,51 +108,53 @@ body .footer .bubbles .bubble {
   left: var(--position, 50%);
   background: var(--footer-background);
   border-radius: 100%;
-  -webkit-animation: bubble-size var(--time, 4s) ease-in infinite var(--delay, 0s), bubble-move var(--time, 4s) ease-in infinite var(--delay, 0s);
-  animation: bubble-size var(--time, 4s) ease-in infinite var(--delay, 0s), bubble-move var(--time, 4s) ease-in infinite var(--delay, 0s);
+  -webkit-animation: bubble-size var(--time, 4s) ease-in infinite
+      var(--delay, 0s),
+    bubble-move var(--time, 4s) ease-in infinite var(--delay, 0s);
+  animation: bubble-size var(--time, 4s) ease-in infinite var(--delay, 0s),
+    bubble-move var(--time, 4s) ease-in infinite var(--delay, 0s);
   transform: translate(-50%, 100%);
 }
-
 
 @-webkit-keyframes bubble-size {
   0%,
   75% {
-      width: var(--size, 4rem);
-      height: var(--size, 4rem);
+    width: var(--size, 4rem);
+    height: var(--size, 4rem);
   }
   100% {
-      width: 0rem;
-      height: 0rem;
+    width: 0rem;
+    height: 0rem;
   }
 }
 
 @keyframes bubble-size {
   0%,
   75% {
-      width: var(--size, 4rem);
-      height: var(--size, 4rem);
+    width: var(--size, 4rem);
+    height: var(--size, 4rem);
   }
   100% {
-      width: 0rem;
-      height: 0rem;
+    width: 0rem;
+    height: 0rem;
   }
 }
 
 @-webkit-keyframes bubble-move {
   0% {
-      bottom: -4rem;
+    bottom: -4rem;
   }
   100% {
-      bottom: var(--distance, 10rem);
+    bottom: var(--distance, 10rem);
   }
 }
 
 @keyframes bubble-move {
   0% {
-      bottom: -4rem;
+    bottom: -4rem;
   }
   100% {
-      bottom: var(--distance, 10rem);
+    bottom: var(--distance, 10rem);
   }
 }
 
@@ -121,29 +162,25 @@ body .footer .bubbles .bubble {
 /* -------------RESPONSIVE-------------- */
 @media only screen and (max-width: 767px) {
   .container {
-      padding-right: 1rem;
-      padding-left: 1rem;
-      max-width: 490px;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    max-width: 490px;
   }
 }
 @media only screen and (max-width: 500px) {
   .container {
-      padding-right: 1rem;
-      padding-left: 1rem;
-      max-width: 400px;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    max-width: 400px;
+  }
+  .rdrCalendarWrapper {
+    font-size: 12px !important;
   }
 }
 @media only screen and (max-width: 414px) {
   .container {
-      max-width: 360px !important;
-      padding-right: 1rem;
-      padding-left: 1rem;
+    max-width: 360px !important;
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 }
-
-
-
-
-
-
-
