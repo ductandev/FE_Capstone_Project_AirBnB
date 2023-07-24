@@ -4,7 +4,7 @@ type Props = {}
 
 export default function Footer({ }: Props) {
     return (
-        <div className='pt-32 bg-white'>
+        <div className='pt-32 bg-white overflow-hidden'>
             {/* <div className="main"></div> */}
             <div className="footer">
                 <div className="bubbles">

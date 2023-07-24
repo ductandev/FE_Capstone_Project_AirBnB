@@ -57,9 +57,6 @@ export default function Detail({ }: Props) {
 
 
   const loginModal = useLoginModal();
-
-  const test = new Date().toLocaleDateString()
-  console.log("🚀 ~ file: Detail.tsx:62 ~ Detail ~ test:", test)
   
 
   const dispatch: DispatchType = useDispatch();
