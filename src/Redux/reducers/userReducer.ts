@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { UserProfileFrm } from '../../Pages/Profile/Profile';
 import { ToastOptions, toast } from 'react-toastify';
-import { USER_LOGIN, clearStorage, getStoreJson, httpNonAuth, setStore, setStoreJson } from '../../Util/config';
+import { USER_LOGIN, getStoreJson, httpNonAuth, setStoreJson } from '../../Util/config';
 
 const toastOptions: ToastOptions<{}> = {
   position: "top-center",
@@ -28,11 +28,13 @@ export interface userProfileApi {
 export interface userProfileState {
   isLoadingChangeProfile: boolean;
   closeInput: boolean;
+  userProfile: userProfileApi | undefined;
 }
 
-const initialState = {
+const initialState:userProfileState = {
   isLoadingChangeProfile: false,
-  closeInput: false
+  closeInput: false,
+  userProfile: getStoreJson("UserProfile"),
 }
 
 const userReducer = createSlice({
@@ -52,6 +54,17 @@ const userReducer = createSlice({
       .addCase(changeProfileAsyncAction.rejected, (state) => {
         state.isLoadingChangeProfile = false;
         state.closeInput = false;
+      })
+
+      .addCase(profileUserAsyncAction.pending, (state) => {
+        state.isLoadingChangeProfile = true;
+      })
+      .addCase(profileUserAsyncAction.fulfilled, (state, action) => {
+        state.isLoadingChangeProfile = false;
+        state.userProfile = action.payload;
+      })
+      .addCase(profileUserAsyncAction.rejected, (state) => {
+        state.isLoadingChangeProfile = false;
       })
   },
 
@@ -79,7 +92,22 @@ export const changeProfileAsyncAction = createAsyncThunk("changeProfileAsyncActi
 
   } catch (err) {
     toast.error('Thay đổi thất bại!', toastOptions);
+    console.log("🚀 ~ file: userReducer.ts:81 ~ changeProfileAsyncAction ~ err:", err)
     // Đảm bảo lỗi được truyền đi
+    throw (err)
+  }
+})
+
+
+export const profileUserAsyncAction = createAsyncThunk("profileUserAsyncAction", async (userID: number) => {
+  try {
+    const res = await httpNonAuth.get(`/api/users/${userID}`);
+
+    setStoreJson("UserProfile", res.data.content);
+
+    return res.data.content;
+  } catch (err) {
+    console.log("🚀 ~ file: userReducer.ts:106 ~ profileUserAsyncAction ~ err:", err)
     throw (err)
   }
 })

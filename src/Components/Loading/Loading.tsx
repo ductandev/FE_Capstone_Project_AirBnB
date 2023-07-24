@@ -6,19 +6,13 @@ import { SyncLoader } from "react-spinners";
 type Props = {};
 
 export default function Loading({}: Props) {
-  const { isLoadingAuth } = useSelector(
-    (state: RootState) => state.authReducer
-  );
-  const { isLoadingChangeProfile } = useSelector(
-    (state: RootState) => state.userReducer
-  );
-  const { isLoadingRoomAPI } = useSelector(
-    (state: RootState) => state.roomReducer
-  );
-  const { isLoadingLocationAPI } = useSelector(
-    (state: RootState) => state.locationReducer
-  );
-
+  const { isLoadingAuth } = useSelector((state: RootState) => state.authReducer);
+  const { isLoadingChangeProfile } = useSelector((state: RootState) => state.userReducer);
+  const { isLoadingLocationAPI } = useSelector((state: RootState) => state.locationReducer);
+  const {isLoadingTripHistory} = useSelector((state:RootState) => state.bookRoomReducer)
+  const { isLoadingRoomAPI } = useSelector((state: RootState) => state.roomReducer);
+  const { isLoadingComment } = useSelector((state: RootState) => state.commentReducer);
+  
   return (
     <div
       style={{
@@ -31,7 +25,9 @@ export default function Loading({}: Props) {
           isLoadingAuth ||
           isLoadingChangeProfile ||
           isLoadingRoomAPI ||
-          isLoadingLocationAPI
+          isLoadingLocationAPI ||
+          isLoadingTripHistory ||
+          isLoadingComment
             ? "flex"
             : "none",
         justifyContent: "center",

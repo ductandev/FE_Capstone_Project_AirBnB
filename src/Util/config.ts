@@ -56,8 +56,8 @@ httpNonAuth.interceptors.request.use(
 http.interceptors.request.use(
   (config: any) => {
     config.headers = { ...config.headers };
-    let token = getStoreJson(USER_LOGIN)?.accessToken;
-    config.headers.Authorization = `Bearer ${token}`;
+    let token = getStoreJson(USER_LOGIN)?.token;
+    config.headers.token = `${token}`;
     config.headers.tokenCybersoft = `${TOKEN_CYBERSOFT}`;
     return config;
   },

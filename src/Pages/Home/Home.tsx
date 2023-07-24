@@ -2,7 +2,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DispatchType, RootState } from "../../Redux/configStore";
 
-import { Room, getDataAllRoomAsyncAction } from "../../Redux/reducers/roomReducer";
+import {
+  Room,
+  getDataPanigationAsyncAction,
+  getDataRoomLocationAsyncAction,
+} from "../../Redux/reducers/roomReducer";
 import {
   Location,
   getDataLocationAsyncAction,
@@ -52,21 +56,38 @@ export default function Home({}: Props) {
     },
   };
 
-  const { arrAllRoom } = useSelector((state: RootState) => state.roomReducer);
+  const { arrPanigation } = useSelector(
+    (state: RootState) => state.roomReducer
+  );
   const { arrLocation } = useSelector(
     (state: RootState) => state.locationReducer
   );
   const dispatch: DispatchType = useDispatch();
 
   // ====CALL API====
-  const getDataListingRoom = async (pageIndex:number, pageSize:number):Promise<void> => {
-    const actionApi = getDataAllRoomAsyncAction({pageIndex, pageSize});
+  const getDataListingRoom = async (
+    pageIndex: number,
+    pageSize: number
+  ): Promise<void> => {
+    const actionApi = getDataPanigationAsyncAction({ pageIndex, pageSize });
     dispatch(actionApi);
   };
 
-  const getDataListingLocation = async (pageIndex:number, pageSize:number):Promise<void> => {
-    const actionApi = getDataLocationAsyncAction({pageIndex, pageSize});
+  const getDataListingLocation = async (
+    pageIndex: number,
+    pageSize: number
+  ): Promise<void> => {
+    const actionApi = getDataLocationAsyncAction({ pageIndex, pageSize });
     dispatch(actionApi);
+  };
+
+  const getDataRoomLocationId = async (idLocation: number): Promise<void> => {
+    const actionApi = getDataRoomLocationAsyncAction(idLocation);
+    dispatch(actionApi);
+  };
+
+  const handleLocationClick = async (idLocation: number): Promise<void> => {
+    await getDataRoomLocationId(idLocation);
   };
 
   useEffect(() => {
@@ -75,7 +96,7 @@ export default function Home({}: Props) {
   }, []);
 
   const renderAllRoom = (): JSX.Element[] => {
-    return arrAllRoom.map((item: Room, index) => {
+    return arrPanigation.map((item: Room, index) => {
       return (
         <div key={item.id}>
           <ListingCard room={item} />
@@ -95,22 +116,30 @@ export default function Home({}: Props) {
 
         {arrLocation?.length > 0 && (
           <>
-            <OwlCarousel className="slider-items owl-carousel overflow-hidden" {...options}>
+            <OwlCarousel
+              className="slider-items owl-carousel overflow-hidden h-[120px]"
+              {...options}
+            >
               {arrLocation.map((item: Location, index) => (
-                <div className="mt-6 text-center" key={item.id}>
+                <div
+                  className="mt-6 text-center hover:font-bold hover:border-b-2"
+                  key={item.id}
+                  onClick={() => handleLocationClick(item.id)}
+                >
                   <img
                     className="
                   rounded-full
                   h-[50px]
                   !w-[50px]
-                  mx-auto"
+                  mx-auto
+                  hover:scale-105"
                     src={item.hinhAnh}
                     alt=""
                   />
                   <p className="overflow-hidden text-ellipsis whitespace-nowrap text-xs">
                     {item.tenViTri}
                   </p>
-                  <p className="overflow-hidden text-ellipsis whitespace-nowrap text-xs">
+                  <p className="overflow-hidden text-ellipsis whitespace-nowrap text-xs pb-2">
                     {item.tinhThanh}
                   </p>
                 </div>
