@@ -35,7 +35,9 @@ root.render(
           <Route path="profile" element={<Profile/>}></Route>
           <Route path="trips" element={<TripHistory/>}></Route>
           <Route path="favourite" element={<Favourite />} />
-          <Route path="book" element={<Book/>} />
+          <Route path="book">
+            <Route path=':id' element={<Book/>}></Route>
+          </Route>
           <Route path="search" element={<Search />} />
 
           <Route path="*" element={<Navigate to="/" />}></Route>

@@ -3,6 +3,8 @@ import "react-date-range/dist/theme/default.css";
 import {DateRange, Range } from "react-date-range";
 import { useState } from "react";
 import { addDays } from "date-fns"; // Thêm import này
+import { useSelector } from "react-redux";
+import { RootState } from "../../Redux/configStore";
 
 type Props = {
     onDateRangeChange: (startDate: Date, endDate: Date, length: number) => void;
@@ -10,10 +12,12 @@ type Props = {
   
 // eslint-disable-next-line no-empty-pattern
 export default function Calendar({onDateRangeChange}: Props) {
+  const { bookTripsInfo } = useSelector((state: RootState) => state.bookRoomReducer);
+
   const [state, setState] = useState<Range[]>([
     {
       startDate: new Date(),
-      endDate: addDays(new Date(), 5),
+      endDate: addDays(bookTripsInfo ? new Date(bookTripsInfo.ngayDi) : new Date(), 5),
       key: "selection",
     },
   ]);

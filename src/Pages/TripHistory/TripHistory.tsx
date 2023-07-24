@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DispatchType, RootState } from "../../Redux/configStore";
 import { USER_LOGIN, getStoreJson } from "../../Util/config";
-import { getBookRoomUserIDAsyncAction } from "../../Redux/reducers/bookRoomReducer";
+import { BookRoomHistory, getBookRoomUserIDAsyncAction } from "../../Redux/reducers/bookRoomReducer";
 import {
   Room,
   getDataAllRoomAsyncAction,
@@ -28,19 +28,50 @@ export default function TripHistory({ }: Props) {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0); // Cuộn về đầu trang khi component được render
     getDataTripHistoryAPI();
     getDataAllRoomAPI();
   }, []);
 
-  const filteredObjectsArrAllRoom = (arrAllRoom as any[]).filter((itemB) =>
-    (arrTripHistory as any[]).some((itemA) => itemA.maPhong === itemB.id)
-  );
+
+  const res = () => {
+    let arrRes: BookRoomHistory[] = [];
+    for (let itemA of arrTripHistory) {
+      for (let itemB of arrAllRoom) {
+        if (itemA.maPhong === itemB.id) {
+          const bookRoomHistory: BookRoomHistory = {
+            tenPhong: itemB.tenPhong,
+            phongNgu: itemB.phongNgu,
+            giuong: itemB.giuong,
+            phongTam: itemB.phongTam,
+            hinhAnh: itemB.hinhAnh,
+
+            id: itemA.id,
+            maPhong: itemA.maPhong,
+            ngayDen: itemA.ngayDen,
+            ngayDi: itemA.ngayDi,
+            soLuongKhach: itemA.soLuongKhach,
+            maNguoiDung: itemA.maNguoiDung,
+          };
+          arrRes.push(bookRoomHistory);
+        }
+      }
+    }
+    return arrRes;
+  };
+
 
   const renderListingTripsHistory = (): JSX.Element[] => {
-    return filteredObjectsArrAllRoom.map((item: Room, index) => {
+    return res().reverse().map((item: BookRoomHistory, index: number) => {
+
+      // Convert ngayDen and ngayDi strings to Date objects
+      const ngayDenDate = new Date(item.ngayDen);
+      const ngayDiDate = new Date(item.ngayDi);
+
       return (
-        <div className="mt-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4" key={index}>
+        <div className="mt-4" key={item.id}>
+          <h1 className="font-semibold md:text-2xl mb-4">#{item.id}</h1>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-4" key={index}>
 
             <div className="col-span-1 rounded-2xl overflow-hidden">
               <img
@@ -62,24 +93,37 @@ export default function TripHistory({ }: Props) {
               >
                 {item.tenPhong}
               </h2>
-              <p className="text-grey-500">{item.khach} khách - Phòng ngủ: {item.phongNgu} - Phòng tắm: {item.phongTam}</p>
+              <p className="text-grey-500">{item.soLuongKhach} khách - Phòng ngủ: {item.phongNgu} - Phòng tắm: {item.phongTam}</p>
               <p className="text-grey-500">
                 Wifi - Bếp - Điều hòa nhiệt độ - Máy giặt
               </p>
-              <div className="flex flex-row text-rose-500 pt-1">
+              <div className="flex flex-row gap-8 mt-4">
+                <div>
+                  <p className="font-bold text-sm md:text-base">Check-in</p>
+                  <p className="text-sm md:text-base">{ngayDenDate.toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <p className="font-bold text-sm md:text-base">Check-out</p>
+                  <p className="text-sm md:text-base">{ngayDiDate.toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <p className="font-bold text-sm md:text-base">Số khách</p>
+                  <p className="text-sm md:text-base">{item.soLuongKhach} khách</p>
+                </div>
+              </div>
+              <div className="flex flex-row justify-between gap-8 mt-1">
+              <button className="px-3 py-2 text-white bg-rose-500 hover:text-black rounded-md">Đánh giá</button>
+              <div className="flex flex-row text-rose-500 mt-2">
                 <span className="pe-1"><BsFillStarFill /></span>
                 <span className="pe-1"><BsFillStarFill /></span>
                 <span className="pe-1"><BsFillStarFill /></span>
                 <span className="pe-1"><BsFillStarFill /></span>
                 <span className="pe-1"><BsStarHalf /></span>
               </div>
-              <p className="font-bold mt-4">
-                ${item.giaTien}
-                <span className="font-normal"> / Đêm</span>
-              </p>
+              </div>
             </div>
           </div>
-          <hr className="w-full md:w-[75%]"/>
+          <hr className="w-full md:w-[75%]" />
 
         </div>
       );
@@ -91,8 +135,8 @@ export default function TripHistory({ }: Props) {
       return (
         <>
           <div className="ps-3 sm:ps-0">
-          <h1 className="text-2xl font-bold text-gray-600 mb-4">Phòng đã thuê</h1>
-          {renderListingTripsHistory()}
+            <h1 className="text-2xl font-bold text-gray-600 mb-4">Phòng đã thuê</h1>
+            {renderListingTripsHistory()}
           </div>
         </>)
     } else {

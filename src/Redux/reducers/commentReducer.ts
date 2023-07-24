@@ -1,5 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { httpNonAuth } from "../../Util/config";
+import { http, httpNonAuth } from "../../Util/config";
+import { ToastOptions, toast } from 'react-toastify';
+
+const toastOptions: ToastOptions<{}> = {
+  position: "top-center",
+  autoClose: 400,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "light",
+};
 
 export interface Comment {
   ngayBinhLuan: Date;
@@ -7,6 +19,13 @@ export interface Comment {
   saoBinhLuan: number;
   tenNguoiBinhLuan: string;
   avatar: string;
+}
+export interface CommentUser {
+  maPhong: number;
+  maNguoiBinhLuan: number;
+  ngayBinhLuan: string;
+  noiDung: string;
+  saoBinhLuan: number;
 }
 
 export interface CommentState {
@@ -34,11 +53,21 @@ const commentReducer = createSlice({
       })
       .addCase(getDataCommentRoomIdAsyncAction.rejected, (state) => {
         state.isLoadingComment = false;
+      })
+
+      .addCase(postCommentRoomAsyncAction.pending, (state) => {
+        state.isLoadingComment = true;
+      })
+      .addCase(postCommentRoomAsyncAction.fulfilled, (state) => {
+        state.isLoadingComment = false;
+      })
+      .addCase(postCommentRoomAsyncAction.rejected, (state) => {
+        state.isLoadingComment = false;
       });
   },
 });
 
-export const {} = commentReducer.actions;
+export const { } = commentReducer.actions;
 
 export default commentReducer.reducer;
 
@@ -57,6 +86,23 @@ export const getDataCommentRoomIdAsyncAction = createAsyncThunk(
         "🚀 ~ file: commentReducer.ts:35 ~ getDataCommentRoomIdAsyncAction ~ err:",
         err
       );
+      throw err;
+    }
+  }
+);
+
+
+export const postCommentRoomAsyncAction = createAsyncThunk(
+  "postCommentRoomAsyncAction",
+  async (content: CommentUser) => {
+    try {
+      const res = await http.post('/api/binh-luan', content);
+
+      toast.success('Bình luận thành công!', toastOptions);
+      return res.data.content;
+    } catch (err) {
+      toast.error('Bình luận thất bại!', toastOptions);
+      console.log("🚀 ~ file: commentReducer.ts:81 ~ err:", err)
       throw err;
     }
   }

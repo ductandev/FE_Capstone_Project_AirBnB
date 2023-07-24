@@ -1,40 +1,112 @@
-import React, { useCallback, useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import { NavLink, Navigate, useNavigate, useParams } from "react-router-dom";
 import { FaChevronLeft } from "react-icons/fa";
 import { IoDiamond } from "react-icons/io5";
-import { useSelector } from "react-redux";
-import { RootState } from "../../Redux/configStore";
+import { useDispatch, useSelector } from "react-redux";
+import { DispatchType, RootState } from "../../Redux/configStore";
 
 import { AiFillStar } from "react-icons/ai";
 import { BiMedal } from "react-icons/bi";
 import Calendar from "../../Components/Calendar/Calendar";
 
-import { addDays } from "date-fns";
+import { getDataRoomIdAsyncAction } from "../../Redux/reducers/roomReducer";
+import { BookRoomAsyncAction } from "../../Redux/reducers/bookRoomReducer";
 
 type Props = {};
 
-
 export default function Book({ }: Props) {
   const { roomDetail } = useSelector((state: RootState) => state.roomReducer);
+  const { userProfile } = useSelector((state: RootState) => state.userReducer);
+  const { bookTripsInfo } = useSelector((state: RootState) => state.bookRoomReducer);
 
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 5));
-  const [length, setLength] = useState<number>(5);
-
+  const [startDate, setStartDate] = useState(new Date(bookTripsInfo ? bookTripsInfo?.ngayDen : ''));
+  const [endDate, setEndDate] = useState(new Date(bookTripsInfo ? bookTripsInfo?.ngayDi : ''));
+  const [length, setLength] = useState(bookTripsInfo?.soDem);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [guestNumber, setShowGuestNumber] = useState(false);
 
-  const tongTien = roomDetail?.giaTien !== undefined ? roomDetail.giaTien * length : 0;
+  const [numTotalGuest, setnumTotalGuest] = useState(bookTripsInfo? bookTripsInfo.soLuongKhach : 0);
+  const [numAdults, setNumAdults] = useState(numTotalGuest);
+  const [numChildren, setNumChildren] = useState(0);
+  const [numInfants, setNumInfants] = useState(0);
+  const [numPets, setNumPets] = useState(0);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
+
+  const dispatch: DispatchType = useDispatch();
+  const param = useParams();
+  const navigate = useNavigate();
+
+  const tongTien =
+    roomDetail?.giaTien !== undefined ? roomDetail.giaTien * (length? length: 0) : 0;
 
   // Callback function to update the selectedDate state with the props from the Calendar component
-  const handleDateRangeChange = (startDate: Date, endDate: Date, length: number) => {
+  const handleDateRangeChange = (
+    startDate: Date,
+    endDate: Date,
+    length: number
+  ) => {
     setStartDate(startDate);
     setEndDate(endDate);
     setLength(length);
   };
 
-  const handleButtonClick = useCallback(() => {
-    setShowCalendar((value) => !value)
-  }, [setShowCalendar])
+  const handleConfirmAndPay = async () => {
+    if (roomDetail && userProfile && startDate && endDate) {
+      setIsSubmitting(true);
+      try {
+        const action = await BookRoomAsyncAction({
+          id: 0,
+          maPhong: roomDetail.id,
+          ngayDen: startDate,
+          ngayDi: endDate,
+          soLuongKhach: numTotalGuest,
+          maNguoiDung: userProfile.id,
+        });
+        dispatch(action);
+        setIsSubmitSuccess(true);
+      } catch (error) {
+        setIsSubmitSuccess(false);
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  };
+
+  const handleCalendarButtonClick = useCallback(() => {
+    setShowCalendar((value) => !value);
+  }, [setShowCalendar]);
+
+  const handleGuestrButtonClick = useCallback(() => {
+    setShowGuestNumber((value) => !value);
+  }, [setShowGuestNumber]);
+
+  const updateGuestCount = useCallback(() => {
+    setnumTotalGuest(numAdults + numChildren + numInfants + numPets);
+  }, [numAdults, numChildren, numInfants, numPets]);
+
+  const getRoomDetailAPI = () => {
+    const id: string | undefined = param.id;
+    const action = getDataRoomIdAsyncAction(id as string);
+    dispatch(action);
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0); // Cuộn về đầu trang khi component được render
+    getRoomDetailAPI();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [param.id]);
+
+  useEffect(() => {
+    updateGuestCount();
+  }, [updateGuestCount]);
+
+  useEffect(() => {
+    if (isSubmitSuccess) {
+      navigate('/'); // Chuyển hướng về trang home khi dữ liệu gửi thành công
+    }
+  }, [isSubmitSuccess, navigate]);
 
   return (
     <div className="container mx-auto mt-14 w-full xl:max-w-[1120px] p-0">
@@ -66,43 +138,147 @@ export default function Book({ }: Props) {
               <div>
                 <p className="font-medium">Ngày</p>
                 <p className="mt-1 font-light text-gray-400 text-sm md:text-base">
-                  {startDate.toLocaleDateString()} đến {endDate.toLocaleDateString()}
+                  {startDate ? startDate.toLocaleDateString() : "No start date available."} đến{" "}
+                  {endDate ? endDate.toLocaleDateString() : "No start date available."}
                 </p>
               </div>
-
 
               <button
                 type="button"
                 className="h-12 text-base leading-[18px] underline shadow-none"
-                onClick={handleButtonClick}
+                onClick={handleCalendarButtonClick}
               >
                 Chỉnh sửa
               </button>
-              {showCalendar && (
-                <div className="absolute w-full top-14 duration-300 borde rounded-xl border-neutral-200 overflow-hidden">
-                  <Calendar onDateRangeChange={handleDateRangeChange} />
-                </div>
-              )}
-
-
-
-
             </div>
+            {showCalendar && (
+              <div className="w-full border rounded-xl border-neutral-200 overflow-hidden">
+                <Calendar onDateRangeChange={handleDateRangeChange} />
+              </div>
+            )}
 
             <div className="mt-6 flex justify-between">
               <div>
-                <p className="font-medium">Khách</p>
+                <p className="font-medium">Số lượng khách</p>
                 <p className="mt-1 font-light text-gray-400 text-sm md:text-base">
-                  {roomDetail?.khach} khách
+                  {numTotalGuest} khách
                 </p>
               </div>
               <button
                 type="button"
                 className="h-12 text-base leading-[18px] underline shadow-none"
+                onClick={handleGuestrButtonClick}
               >
                 Chỉnh sửa
               </button>
             </div>
+            {guestNumber && (
+              <div className="w-full border rounded-xl border-neutral-200 overflow-hidden py-2 px-8">
+                <div className="flex flex-row items-center justify-between pt-2">
+                  <div className="text-xs md:text-sm">
+                    <h1 className="font-bold">Người lớn</h1>
+                    <p className="text-gray-400">Từ 13 tuổi trở lên</p>
+                  </div>
+                  <div className="flex flex-row">
+                    <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                            onClick={() => {
+                              if (numAdults >= 1) {
+                                setNumAdults(numAdults - 1)
+                                setnumTotalGuest(numAdults - 1)
+                              }
+                            }}
+                    >-</button>
+                    <input className="w-12 text-center border mx-2" type="text" readOnly value={numAdults} />
+                    <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                            onClick={() => {
+                              if (numAdults >= 0) {
+                                setNumAdults(numAdults + 1)
+                                setnumTotalGuest(numAdults + 1)
+                              }
+                            }}
+                    >+</button>
+                  </div>
+                </div>
+
+                <div className="flex flex-row items-center justify-between pt-2">
+                  <div className="text-xs md:text-sm">
+                    <h1 className="font-bold">Trẻ em</h1>
+                    <p className="text-gray-400">Độ tuổi 2 - 12</p>
+                  </div>
+                  <div className="flex flex-row">
+                    <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                            onClick={() => {
+                              if (numChildren >= 1) {
+                                setNumChildren(numChildren - 1)
+                                setnumTotalGuest(numChildren - 1)
+                              }
+                            }}
+                    >-</button>
+                    <input className="w-12 text-center border mx-2" type="text" readOnly value={numChildren} />
+                    <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                            onClick={() => {
+                              if (numChildren >= 0) {
+                                setNumChildren(numChildren + 1)
+                                setnumTotalGuest(numChildren + 1)
+                              }
+                            }}
+                    >+</button>
+                  </div>
+                </div>
+
+                <div className="flex flex-row items-center justify-between pt-2">
+                  <div className="text-xs md:text-sm">
+                    <h1 className="font-bold">Em bé</h1>
+                    <p className="text-gray-400">Dưới 2 tuổi</p>
+                  </div>
+                  <div className="flex flex-row">
+                    <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                            onClick={() => {
+                              if (numInfants >= 1) {
+                                setNumInfants(numInfants - 1)
+                                setnumTotalGuest(numInfants - 1)
+                              }
+                            }}
+                    >-</button>
+                    <input className="w-12 text-center border mx-2" type="text" readOnly value={numInfants} />
+                    <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                            onClick={() => {
+                              if (numInfants >= 0) {
+                                setNumInfants(numInfants + 1)
+                                setnumTotalGuest(numInfants + 1)
+                              }
+                            }}
+                    >+</button>
+                  </div>
+                </div>
+
+                <div className="flex flex-row items-center justify-between pt-2">
+                  <div className="text-xs md:text-sm">
+                    <h1 className="font-bold">Thú cưng</h1>
+                    <p className="text-gray-400">Dưới 2 tuổi</p>
+                  </div>
+                  <div className="flex flex-row">
+                    <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                            onClick={() => {
+                              if (numPets >= 1) {
+                                setNumPets(numPets - 1)
+                                setnumTotalGuest(numPets - 1)
+                              }
+                            }}
+                    >-</button>
+                    <input className="w-12 text-center border mx-2" type="text" readOnly value={numPets} />
+                    <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                            onClick={() => {
+                              if (numPets >= 0) {
+                                setNumPets(numPets + 1)
+                                setnumTotalGuest(numPets + 1)
+                              }
+                            }}
+                    >+</button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <hr className="my-8" />
@@ -118,10 +294,10 @@ export default function Book({ }: Props) {
             <button
               type="button"
               className="h-12 text-base rounded-lg px-6 focus:outline-none w-full bg-rose-500 text-white hover:text-black"
+              disabled={isSubmitting}
+              onClick={handleConfirmAndPay}
             >
-              <div className="flex-center w-full gap-2">
-                Xác nhận và thanh toán • Airbnb
-              </div>
+              {isSubmitting ? "Đang xử lý..." : "Xác nhận và thanh toán • Airbnb"}
             </button>
           </div>
         </div>

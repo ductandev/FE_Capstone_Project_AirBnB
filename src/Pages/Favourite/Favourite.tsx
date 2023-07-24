@@ -9,6 +9,7 @@ export default function Favourite({}: Props) {
   const [favouriteRooms, setFavouriteRooms] = useState<Room[]>([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0); // Cuộn về đầu trang khi component được render
     const storedFavouriteRooms: Room[] | null = getStoreJson('favourite');
     if (Array.isArray(storedFavouriteRooms)) {
       setFavouriteRooms(storedFavouriteRooms);

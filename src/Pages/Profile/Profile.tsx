@@ -66,6 +66,7 @@ export default function Profile({ }: Props) {
   }
 
   useEffect(()=>{
+    window.scrollTo(0, 0); // Cuộn về đầu trang khi component được render
     setTimeout(() => {
       setIsEditingName(false);
       setIsEditingEmail(false);

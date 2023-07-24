@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DispatchType, RootState } from "../../Redux/configStore";
 import { useDispatch, useSelector } from "react-redux";
 import { getDataRoomIdAsyncAction } from "../../Redux/reducers/roomReducer";
 import { AiFillStar, AiOutlineRight } from "react-icons/ai";
-import { Comment, getDataCommentRoomIdAsyncAction } from "../../Redux/reducers/commentReducer";
+import { Comment, getDataCommentRoomIdAsyncAction, postCommentRoomAsyncAction } from "../../Redux/reducers/commentReducer";
 import { getDataLocationIDAsyncAction } from "../../Redux/reducers/locationReducer";
 
 import { GrUpload } from "react-icons/gr";
@@ -24,6 +24,9 @@ import { addDays } from "date-fns";
 
 import { useNavigate } from "react-router-dom";
 
+import useLoginModal from "../../Hooks/useLoginModal";
+import { setBookTripsInfo } from "../../Redux/reducers/bookRoomReducer";
+
 
 
 type Props = {};
@@ -34,14 +37,35 @@ export default function Detail({ }: Props) {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 5));
   const [length, setLength] = useState<number>(5);
+  const [guestNumber, setGuestNumber] = useState(false);
+
+
+  const [numTotalGuest, setnumTotalGuest] = useState(0);
+  const [numAdults, setNumAdults] = useState(1);
+  const [numChildren, setNumChildren] = useState(0);
+  const [numInfants, setNumInfants] = useState(0);
+  const [numPets, setNumPets] = useState(0);
+
+  const [commentContent, setCommentContent] = useState("  "); // Thêm state để lưu nội dung bình luận
+
 
   const { roomDetail } = useSelector((state: RootState) => state.roomReducer);
   const { arrCommentRoomId } = useSelector((state: RootState) => state.commentReducer);
   const { locationDetail } = useSelector((state: RootState) => state.locationReducer);
+  const { userLogin } = useSelector((state: RootState) => state.authReducer)
+  const { userProfile } = useSelector((state: RootState) => state.userReducer)
+
+
+  const loginModal = useLoginModal();
+
+  const test = new Date().toLocaleDateString()
+  console.log("🚀 ~ file: Detail.tsx:62 ~ Detail ~ test:", test)
+  
+
   const dispatch: DispatchType = useDispatch();
   const param = useParams();
-
   const navigate = useNavigate();
+
 
   const getRoomDetailAPI = () => {
     const id: string | undefined = param.id;
@@ -53,11 +77,35 @@ export default function Detail({ }: Props) {
     dispatch(action3);
   };
 
+
   useEffect(() => {
+    window.scrollTo(0, 0); // Cuộn về đầu trang khi component được render
     getRoomDetailAPI();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param.id]);
 
+  // Hàm xử lý khi người dùng thay đổi nội dung trong textarea
+  const handleCommentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentContent(event.target.value);
+  };
+
+  // Hàm xử lý khi người dùng nhấn nút "Gửi Bình luận"
+  const handleSubmitComment = () => {
+    console.log("Nội dung bình luận:", commentContent);
+    if (userProfile && roomDetail){
+      const dataComment = {
+        maPhong: roomDetail?.id,
+        maNguoiBinhLuan: userProfile?.id,
+        ngayBinhLuan: new Date().toLocaleDateString(),
+        noiDung: commentContent,
+        saoBinhLuan: 5,
+      }
+      const actionAPI = postCommentRoomAsyncAction(dataComment);
+      dispatch(actionAPI)
+    }
+
+    // Tại đây, bạn có thể thực hiện các xử lý khác liên quan đến việc gửi bình luận
+  };
 
   const handleDateRangeChange = (startDate: Date, endDate: Date, length: number) => {
     setStartDate(startDate);
@@ -65,7 +113,25 @@ export default function Detail({ }: Props) {
     setLength(length);
   };
 
+
+  const handleGuestrButtonClick = useCallback(() => {
+    setGuestNumber((value) => !value);
+  }, [setGuestNumber]);
+
+
+  const updateGuestCount = useCallback(() => {
+    setnumTotalGuest(numAdults + numChildren + numInfants + numPets);
+  }, [numAdults, numChildren, numInfants, numPets]);
+
+  useEffect(() => {
+    updateGuestCount();
+  }, [updateGuestCount]);
+
+
   const tongTien = roomDetail?.giaTien !== undefined ? roomDetail.giaTien * length : 0;
+
+
+
 
   const renderComent = (): JSX.Element[] => {
     return arrCommentRoomId.map((item: Comment, index) => {
@@ -90,8 +156,77 @@ export default function Detail({ }: Props) {
     })
   }
 
+  const renderAddComment = () => {
+    if (typeof userLogin !== "undefined") {
+      return (
+        <>
+          <textarea
+            style={{ height: "140px" }}
+            className="border w-full rounded-lg p-1"
+            value={commentContent}
+            onChange={handleCommentChange}
+          />
+          <button
+            className="mt-2 rounded-md px-4 py-2 bg-rose-500 text-white hover:text-black"
+            onClick={handleSubmitComment}
+          >
+            Gửi Bình luận
+          </button>
+        </>
+      )
+    } else {
+      return (
+        <>
+          <h1 className="text-[22px] font-bold">Hãy đăng nhập để thêm bình luận</h1>
+        </>
+      )
+    }
+  }
 
-  
+  const renderButton = () => {
+    if (typeof userLogin !== "undefined") {
+      return (
+        <>
+          <button
+            type="button"
+            className="bg-rose-500 text-white hover:text-black h-12 rounded-lg border-transparent px-6 transition-all duration-200 ease-linear focus:outline-none border border-solid font-semibold shadow-drop w-full mt-4"
+            onClick={() => {
+              const dataToSend = {
+                maPhong: roomDetail?.id,
+                ngayDen: startDate.toISOString(),
+                ngayDi: endDate.toISOString(),
+                soLuongKhach: numTotalGuest,
+                maNguoiDung: 3041,
+                soDem: length,
+                tongTien: tongTien,
+              };
+              dispatch(setBookTripsInfo(dataToSend));
+
+              navigate(`/book/${roomDetail?.id}`)
+            }}
+          >
+            Đặt phòng
+          </button>
+        </>
+      )
+    } else {
+      return (
+        <>
+          <button
+            type="button"
+            className="bg-gray-400 text-white hover:text-black h-12 rounded-lg border-transparent px-6 transition-all duration-200 ease-linear focus:outline-none border border-solid font-semibold shadow-drop w-full mt-4"
+            onClick={() => {
+              loginModal.onOpen();
+            }}
+          >
+            Đăng nhập để đặt phòng
+          </button>
+        </>
+      )
+    }
+  }
+
+
   return (
     <div className="container mx-auto xl:max-w-[1300px]">
       <h1 className="text-xl md:text-[26px] text-[#484848] font-semibold mt-4">
@@ -238,7 +373,7 @@ export default function Detail({ }: Props) {
         <div className="col-span-1">
           <div className="sticky top-[85px] ml-2 pt-6 ">
             <div className="min-h-[200px] max-w-full rounded-xl border-[0.25px] border-light-gray p-6 shadow-modal">
-              <p>Add dates for prices</p>
+              <p className="mb-2 font-bold">Chi tiết giá</p>
               <div className="rounded-t-xl border border-black flex flex-row justify-around text-[10px] lg:text-xs">
                 <div className="px-2 sm:px-3 lg:px-6 py-1 ">
                   <p className="font-bold">CHECK - IN</p>
@@ -250,24 +385,129 @@ export default function Detail({ }: Props) {
                   <p>{endDate.toLocaleDateString()}</p>
                 </div>
               </div>
-              <div className="rounded-b-xl border border-black text-xs border-t-0">
-                <div className="p-1 text-center">
-                  <p className="font-bold">GUEST</p>
-                  <p>{roomDetail?.khach}</p>
+              <div className="rounded-b-xl border border-black text-sm border-t-0 relative">
+                <div className="p-1 text-center" onClick={handleGuestrButtonClick}>
+                  <p className="font-bold">Số lượng khách</p>
+                  <p className="w-full p-1">{numTotalGuest}</p>
                 </div>
+                {guestNumber && (
+                  <div className="absolute bg-white w-[102%] -translate-x-[2px] border rounded-xl border-neutral-200 overflow-hidden py-2 px-2 mt-1">
+                    <div className="flex flex-row items-center justify-between pt-2">
+                      <div className="text-xs md:text-sm">
+                        <h1 className="font-bold">Người lớn</h1>
+                        <p className="text-gray-400">Từ 13 tuổi trở lên</p>
+                      </div>
+                      <div className="flex flex-row">
+                        <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                          onClick={() => {
+                            if (numAdults >= 1) {
+                              setNumAdults(numAdults - 1)
+                              setnumTotalGuest(numAdults - 1)
+                            }
+                          }}
+                        >-</button>
+                        <input className="w-12 text-center border mx-2" type="text" readOnly value={numAdults} />
+                        <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                          onClick={() => {
+                            if (numAdults >= 0) {
+                              setNumAdults(numAdults + 1)
+                              setnumTotalGuest(numAdults + 1)
+                            }
+                          }}
+
+                        >+</button>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-row items-center justify-between pt-2">
+                      <div className="text-xs md:text-sm">
+                        <h1 className="font-bold">Trẻ em</h1>
+                        <p className="text-gray-400">Độ tuổi 2 - 12</p>
+                      </div>
+                      <div className="flex flex-row">
+                        <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                          onClick={() => {
+                            if (numChildren >= 1) {
+                              setNumChildren(numChildren - 1)
+                              setnumTotalGuest(numChildren - 1)
+                            }
+                          }}
+
+                        >-</button>
+                        <input className="w-12 text-center border mx-2" type="text" readOnly value={numChildren} />
+                        <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                          onClick={() => {
+                            if (numChildren >= 0) {
+                              setNumChildren(numChildren + 1)
+                              setnumTotalGuest(numChildren + 1)
+                            }
+                          }}
+                        >+</button>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-row items-center justify-between pt-2">
+                      <div className="text-xs md:text-sm">
+                        <h1 className="font-bold">Em bé</h1>
+                        <p className="text-gray-400">Dưới 2 tuổi</p>
+                      </div>
+                      <div className="flex flex-row">
+                        <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                          onClick={() => {
+                            if (numInfants >= 1) {
+                              setNumInfants(numInfants - 1)
+                              setnumTotalGuest(numInfants - 1)
+                            }
+                          }}
+
+                        >-</button>
+                        <input className="w-12 text-center border mx-2" type="text" readOnly value={numInfants} />
+                        <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                          onClick={() => {
+                            if (numInfants >= 0) {
+                              setNumInfants(numInfants + 1)
+                              setnumTotalGuest(numInfants + 1)
+                            }
+                          }}
+                        >+</button>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-row items-center justify-between pt-2">
+                      <div className="text-xs md:text-sm">
+                        <h1 className="font-bold">Thú cưng</h1>
+                        <p className="text-gray-400">Dưới 2 tuổi</p>
+                      </div>
+                      <div className="flex flex-row">
+                        <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                          onClick={() => {
+                            if (numPets >= 1) {
+                              setNumPets(numPets - 1)
+                              setnumTotalGuest(numPets - 1)
+                            }
+                          }}
+
+                        >-</button>
+                        <input className="w-12 text-center border mx-2" type="text" readOnly value={numPets} />
+                        <button className="text-white rounded-md bg-rose-500 hover:text-black px-4 py-2"
+                          onClick={() => {
+                            if (numPets >= 0) {
+                              setNumPets(numPets + 1)
+                              setnumTotalGuest(numPets + 1)
+                            }
+                          }}
+                        >+</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <button
-                type="button"
-                className="bg-rose-500 text-white hover:text-black h-12 text-base leading-[18px] inline-block touch-manipulation select-none rounded-lg border-transparent px-6 transition-all duration-200 ease-linear focus:outline-none border border-solid font-semibold shadow-drop w-full mt-4"
-              >
-                <div className="flex-center w-full gap-2" onClick={()=>{
-                  navigate('/book')
-                }}>Đặt phòng</div>
-              </button>
+              {renderButton()}
+
               <div>
                 <p className="mt-4 text-center text-xs">
-                  You won't be charged yet
+                  Chỉ tính phí khi xác nhận đặt phòng
                 </p>
                 <div className="mt-4">
                   <div className="flex justify-between">
@@ -378,6 +618,10 @@ export default function Detail({ }: Props) {
             {arrCommentRoomId.length > 0 ? renderComent() : <h1 className="text-2xl font-bold">Chưa có bình luận nào</h1>}
           </div>
         </div>
+      </div>
+
+      <div className="my-8">
+        {renderAddComment()}
       </div>
 
       <hr />
