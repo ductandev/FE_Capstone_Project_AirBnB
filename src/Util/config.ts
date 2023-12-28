@@ -5,7 +5,7 @@ import { history } from "../index";
 export const DOMAIN = "https://airbnbnew.cybersoft.edu.vn";
 export const TOKEN = "accessToken";
 export const USER_LOGIN = "userLogin";
-export const TOKEN_CYBERSOFT = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA0MyIsIkhldEhhblN0cmluZyI6IjI0LzEyLzIwMjMiLCJIZXRIYW5UaW1lIjoiMTcwMzM3NjAwMDAwMCIsIm5iZiI6MTY2OTQ4MjAwMCwiZXhwIjoxNzAzNTIzNjAwfQ.epz5zMExyUD0sNaBnruLp5Jopf0DTxVeelbNz1VtsJI`;
+export const TOKEN_CYBERSOFT = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA0MyIsIkhldEhhblN0cmluZyI6IjI0LzEyLzIwNTAiLCJIZXRIYW5UaW1lIjoiMTcwMzM3NjAwMDAwMCIsIm5iZiI6MTY2OTQ4MjAwMCwiZXhwIjoxNzAzNTIzNjAwfQ.2radbmx70seDqJ5jDWARBnqLSkzyIAziLcejvrw6QB0`;
 
 export const { getStoreJson, setStoreJson, getStore, setStore, clearStorage } = {
   getStoreJson: (name: string): any => {
